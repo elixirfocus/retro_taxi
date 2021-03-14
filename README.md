@@ -1,5 +1,19 @@
 # RetroTaxi
 
+This project aims to provide a simple, focused tool to help people run a team retrospective meeting online. Our solution will value:
+
+* **A registrations-free experience** over formalized team management.
+* **One-time use boards** over detailed historic archives.
+* **Conversations** over analytical measurements or note taking.
+* **A responsive web experience** over platform-specific apps.
+
+## FAQ
+
+**Why call it RetroTaxi?**  
+I wanted a url where you could start typing `retro` and get the autocomplete. `.taxi` was just a available, simple and memorable top level domain. 
+
+## Phoenix
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
