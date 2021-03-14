@@ -1,5 +1,9 @@
 # RetroTaxi
 
+A retrospective meeting is a regular practice of agile teams or any group of people who are looking for continued improvement to their team process, communication or habits. Successful retro meetings give the team an opportunity to reflect on what is working, what is not and what they want to do next. 
+
+Retrospective meetings can be executed in many different ways but with the advent of more people working remotely having an online collaborative tool to help execute the meeting and capture feedback is often advantageous. Some people will initially lean on collaborative tools like Google Docs to help execute a retro meeting and while it can work, it is not very elegant or structured. There are also dedicated retro tools but most are locked behind account registration, paywalls or try to do too many things.
+
 This project aims to provide a simple, focused tool to help people run a team retrospective meeting online. Our solution will value:
 
 * **A registrations-free experience** over formalized team management.
