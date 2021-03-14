@@ -20,7 +20,11 @@ defmodule RetroTaxi.MixProject do
         # The main page in the docs
         main: "RetroTaxi",
         # logo: "path/to/logo.png",
-        extras: ["README.md"]
+        extras: [
+          "README.md",
+          "docs/cycles.md",
+          "docs/c1/feature_post_and_vote.md"
+        ]
       ]
     ]
   end
