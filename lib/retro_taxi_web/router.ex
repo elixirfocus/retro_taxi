@@ -17,7 +17,7 @@ defmodule RetroTaxiWeb.Router do
   scope "/", RetroTaxiWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    get "/", BoardMockupController, :index
   end
 
   # Other scopes may use custom stacks.
