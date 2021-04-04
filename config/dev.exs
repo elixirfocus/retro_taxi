@@ -57,6 +57,9 @@ config :retro_taxi, RetroTaxiWeb.Endpoint,
 # Watch static and templates for browser reloading.
 config :retro_taxi, RetroTaxiWeb.Endpoint,
   live_reload: [
+    # Hide live reload iframe:
+    # https://github.com/phoenixframework/phoenix_live_reload/issues/109
+    iframe_attrs: [class: "hidden"],
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
