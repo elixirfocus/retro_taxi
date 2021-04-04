@@ -10,7 +10,7 @@
     <script>/* Empty script tag reduces Firefox FOUC bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1404468 */</script>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
+  <body class="bg-gray-100">
     <%= @inner_content %>
   </body>
 </html>
