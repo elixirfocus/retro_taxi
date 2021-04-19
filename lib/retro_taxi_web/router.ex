@@ -17,7 +17,11 @@ defmodule RetroTaxiWeb.Router do
   scope "/", RetroTaxiWeb do
     pipe_through :browser
 
-    get "/", BoardMockupController, :index
+    get "/", BoardController, :new
+    post "/", BoardController, :create
+    get "/board/:id", BoardController, :show
+
+    get "/mockup", BoardMockupController, :index
   end
 
   # Other scopes may use custom stacks.

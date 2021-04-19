@@ -24,6 +24,7 @@ defmodule RetroTaxi.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import RetroTaxi.DataCase
+      import RetroTaxi.Factory
     end
   end
 

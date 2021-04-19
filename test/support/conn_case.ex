@@ -23,6 +23,7 @@ defmodule RetroTaxiWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import RetroTaxiWeb.ConnCase
+      import RetroTaxi.Factory
 
       alias RetroTaxiWeb.Router.Helpers, as: Routes
 
