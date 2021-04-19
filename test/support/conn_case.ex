@@ -17,6 +17,8 @@ defmodule RetroTaxiWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -33,10 +35,10 @@ defmodule RetroTaxiWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RetroTaxi.Repo)
+    :ok = Sandbox.checkout(RetroTaxi.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(RetroTaxi.Repo, {:shared, self()})
+      Sandbox.mode(RetroTaxi.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

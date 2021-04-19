@@ -1,4 +1,6 @@
 defmodule RetroTaxiWeb.PageLive do
+  @moduledoc false
+
   use RetroTaxiWeb, :live_view
 
   @impl true
