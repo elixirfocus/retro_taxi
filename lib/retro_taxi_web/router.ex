@@ -21,6 +21,8 @@ defmodule RetroTaxiWeb.Router do
     post "/", BoardController, :create
     get "/board/:id", BoardController, :show
 
+    live "/sample", PageLive, :index
+
     get "/mockup", BoardMockupController, :index
   end
 
