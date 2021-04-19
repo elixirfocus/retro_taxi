@@ -48,11 +48,16 @@ defmodule RetroTaxi.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ecto_sql, "~> 3.4"},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
+      {:ex_machina, "~> 2.7.0"},
+      {:faker, "~> 0.16", only: :test},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_dashboard, "~> 0.4"},
@@ -62,11 +67,7 @@ defmodule RetroTaxi.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
-      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
-      {:ex_machina, "~> 2.7.0"},
-      {:faker, "~> 0.16", only: :test},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:telemetry_poller, "~> 0.4"}
     ]
   end
 
