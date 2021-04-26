@@ -56,6 +56,7 @@ defmodule RetroTaxi.MixProject do
       {:faker, "~> 0.16", only: :test},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
+      {:inch_ex, github: "rrrene/inch_ex", only: [:dev, :test]},
       {:jason, "~> 1.0"},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:phoenix_ecto, "~> 4.1"},
