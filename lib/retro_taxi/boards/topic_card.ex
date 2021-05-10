@@ -14,13 +14,15 @@ defmodule RetroTaxi.Boards.TopicCard do
 
   alias RetroTaxi.Boards.Column
 
+  @type id :: integer()
+
   @typedoc """
   TODO
   """
   @type t :: %__MODULE__{
           __meta__: Ecto.Schema.Metadata.t(),
           content: String.t(),
-          id: integer(),
+          id: id(),
           inserted_at: DateTime.t(),
           sort_order: integer(),
           updated_at: DateTime.t()

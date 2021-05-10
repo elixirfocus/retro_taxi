@@ -28,8 +28,10 @@ defmodule RetroTaxi.Factory do
   end
 
   def topic_card_factory do
+    # FIXME: The use of this factory does not currently match the behaviors
+    # built into `create_topic_card/2` making it use questionable.
     %TopicCard{
-      content: Faker.Lorem.sentences()
+      content: Faker.Lorem.sentence()
     }
   end
 end

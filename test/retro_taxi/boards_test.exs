@@ -7,7 +7,7 @@ defmodule RetroTaxi.BoardsTest do
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
 
-  describe "create_board/1" do
+  describe "create_board/2" do
     test "success: works with valid name" do
       valid_name = "Test Board"
       assert {:ok, %Board{name: ^valid_name}} = Boards.create_board(name: valid_name)
@@ -44,17 +44,17 @@ defmodule RetroTaxi.BoardsTest do
   end
 
   describe "change_board/2" do
-    test "success: returns a changeset for a empty named struct and no attributes" do
+    test "success: returns a changeset for an empty named struct and no attributes" do
       assert %Changeset{} = Boards.change_board(%Board{})
     end
 
-    test "success: returns a changeset for previous entity and different attributes" do
+    test "success: returns a changeset for the given entity and new attributes" do
       board = insert(:board)
       assert %Changeset{} = Boards.change_board(board, %{name: "new name"})
     end
   end
 
-  describe "create_topic_card/1" do
+  describe "create_topic_card/2" do
     setup context do
       %Board{columns: columns} = insert(:board)
       %Column{id: column_id} = hd(columns)
@@ -69,6 +69,16 @@ defmodule RetroTaxi.BoardsTest do
                Boards.create_topic_card(content: sample_content, column_id: column_id)
     end
 
+    test "success: a new topic card will have a sort order that matches the previous count plus one",
+         %{column_id: column_id} do
+      insert_list(3, :topic_card, column_id: column_id)
+
+      sample_content = Faker.Lorem.sentence()
+
+      assert {:ok, %TopicCard{content: ^sample_content, sort_order: 4}} =
+               Boards.create_topic_card(content: sample_content, column_id: column_id)
+    end
+
     test "failure: fails with invalid content", %{column_id: column_id} do
       invalid_content = nil
 
@@ -76,6 +86,58 @@ defmodule RetroTaxi.BoardsTest do
                Boards.create_topic_card(content: invalid_content, column_id: column_id)
 
       assert %{content: ["can't be blank"]} = errors_on(changeset)
+    end
+  end
+
+  describe "change_topic_card/2" do
+    test "success: returns a changeset for a empty named struct and no attributes" do
+      assert %Changeset{} = Boards.change_topic_card(%TopicCard{})
+    end
+
+    test "success: returns a changeset for the given entity and new attributes" do
+      topic_card = insert(:topic_card)
+      assert %Changeset{} = Boards.change_topic_card(topic_card, %{content: "new content"})
+    end
+  end
+
+  describe "list_topic_cards/1" do
+    setup context do
+      %Board{columns: columns} = insert(:board)
+      %Column{id: column_id} = hd(columns)
+
+      {:ok, Map.put(context, :column_id, column_id)}
+    end
+
+    test "success: returns the expected list of entities", %{column_id: column_id} do
+      [
+        %TopicCard{content: content_1},
+        %TopicCard{content: content_2},
+        %TopicCard{content: content_3},
+        %TopicCard{content: content_4}
+      ] = insert_list(4, :topic_card, column_id: column_id)
+
+      fetched_topic_cards = Boards.list_topic_cards(column_id: column_id)
+
+      assert length(fetched_topic_cards) == 4
+      assert Enum.find(fetched_topic_cards, &match?(%TopicCard{content: ^content_1}, &1))
+      assert Enum.find(fetched_topic_cards, &match?(%TopicCard{content: ^content_2}, &1))
+      assert Enum.find(fetched_topic_cards, &match?(%TopicCard{content: ^content_3}, &1))
+      assert Enum.find(fetched_topic_cards, &match?(%TopicCard{content: ^content_4}, &1))
+    end
+  end
+
+  describe "count_topic_cards/1" do
+    setup context do
+      %Board{columns: columns} = insert(:board)
+      %Column{id: column_id} = hd(columns)
+
+      {:ok, Map.put(context, :column_id, column_id)}
+    end
+
+    test "success: returns the expected count of entities", %{column_id: column_id} do
+      insert_list(4, :topic_card, column_id: column_id)
+
+      assert 4 == Boards.count_topic_cards(column_id: column_id)
     end
   end
 end

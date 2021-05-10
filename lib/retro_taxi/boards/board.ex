@@ -9,13 +9,15 @@ defmodule RetroTaxi.Boards.Board do
 
   alias RetroTaxi.Boards.Column
 
+  @type id :: integer()
+
   @typedoc """
   TODO
   """
   @type t :: %__MODULE__{
           __meta__: Ecto.Schema.Metadata.t(),
           columns: [Column.t()],
-          id: integer(),
+          id: id(),
           inserted_at: DateTime.t(),
           name: String.t(),
           updated_at: DateTime.t()
