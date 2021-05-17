@@ -3,34 +3,21 @@ defmodule RetroTaxiWeb.ColumnComponent do
 
   alias RetroTaxi.Boards
 
-  # def mount(socket) do
-  #   IO.inspect(socket.assigns, label: "ColumnComponent")
-
-  #   column_id = socket.assigns.column.id
-
-  #   socket =
-  #     assign(socket,
-  #       show_create_form: false,
-  #       topic_cards: Boards.list_topic_cards(column_id: column_id)
-  #     )
-
-  #   {:ok, socket}
-  # end
-
   def update(assigns, socket) do
     socket =
       socket
       |> assign(assigns)
       |> assign(topic_cards: Boards.list_topic_cards(column_id: assigns.column.id))
 
-    IO.inspect(socket.assigns, label: "ColumnComponent")
-
     {:ok, socket}
   end
 
   def handle_event("add", _params, socket) do
     {:ok, topic_card} =
-      Boards.create_topic_card(content: "Testing", column_id: socket.assigns.column.id)
+      Boards.create_topic_card(
+        content: Faker.Lorem.sentence(),
+        column_id: socket.assigns.column.id
+      )
 
     IO.inspect(topic_card, label: "added")
 

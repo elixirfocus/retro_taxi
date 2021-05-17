@@ -53,7 +53,7 @@ defmodule RetroTaxi.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:ex_machina, "~> 2.7.0"},
-      {:faker, "~> 0.16", only: :test},
+      {:faker, "~> 0.16"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
       {:inch_ex, github: "rrrene/inch_ex", only: [:dev, :test]},

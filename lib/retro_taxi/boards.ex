@@ -80,6 +80,16 @@ defmodule RetroTaxi.Boards do
     |> Repo.insert()
   end
 
+  def update_topic_card(topic_card, attrs) do
+    topic_card
+    |> change_topic_card(attrs)
+    |> Repo.update()
+  end
+
+  def delete_topic_card(topic_card) do
+    Repo.delete(topic_card)
+  end
+
   @doc """
   Returns an `Ecto.Changeset` for tracking changes for the passed in
   `RetroTaxis.Boards.TopicCard` struct or entity.
@@ -109,7 +119,7 @@ defmodule RetroTaxi.Boards do
 
   @spec query_topic_cards_for_column_id(Column.id()) :: Ecto.Query.t()
   defp query_topic_cards_for_column_id(column_id) do
-    from tc in TopicCard, where: tc.column_id == ^column_id
+    from tc in TopicCard, where: tc.column_id == ^column_id, order_by: tc.sort_order
   end
 
   @spec default_columns() :: list(%{title: String.t(), sort_order: non_neg_integer()})
