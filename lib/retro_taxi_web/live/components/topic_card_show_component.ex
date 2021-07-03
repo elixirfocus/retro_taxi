@@ -12,7 +12,7 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
     {:ok, socket}
   end
 
-  def handle_event("toggle-editing", _, socket) do
+  def handle_event("start-editing", _, socket) do
     socket =
       socket
       |> assign(is_editing: !socket.assigns.is_editing)
@@ -90,7 +90,7 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
         </div>
 
         <div class="flex justify-between items-end mt-2">
-          <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "toggle-editing" %>
+          <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "start-editing" %>
           <%= live_component @socket, RetroTaxiWeb.VoteButtonComponent %>
         </div>
       </div>
