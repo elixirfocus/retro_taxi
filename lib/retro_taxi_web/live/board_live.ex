@@ -6,10 +6,9 @@ defmodule RetroTaxiWeb.BoardLive do
   alias RetroTaxi.Boards
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
-    board = Boards.get_board!(id, [:columns])
-    # IO.inspect(socket, label: "BoardLive")
-    {:ok, assign(socket, board: board)}
+  def mount(:not_mounted_at_router, session, socket) do
+    board = Boards.get_board!(session["board_id"], [:columns])
+    {:ok, assign(socket, board: board, display_name: session["identity_id"])}
   end
 
   @impl true
@@ -24,7 +23,7 @@ defmodule RetroTaxiWeb.BoardLive do
     # this file, we may want similar ownership of the header layout rules that
     # currently live in `BoardHeaderComponent`.
     ~L"""
-    <%= live_component @socket, RetroTaxiWeb.BoardHeaderComponent, board: @board %>
+    <%= live_component @socket, RetroTaxiWeb.BoardHeaderComponent, board: @board, display_name: @display_name %>
 
     <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 

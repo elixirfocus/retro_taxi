@@ -1,6 +1,8 @@
 defmodule RetroTaxiWeb.BoardController do
   use RetroTaxiWeb, :controller
 
+  import Phoenix.LiveView.Controller
+
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.Board
 
@@ -19,8 +21,17 @@ defmodule RetroTaxiWeb.BoardController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    board = Boards.get_board!(id)
-    render(conn, "show.html", board: board)
+  def show(conn, %{"id" => board_id}) do
+    conn
+    |> populate_empty_identity_id()
+    |> live_render(RetroTaxiWeb.BoardLive, session: %{"board_id" => board_id})
+  end
+
+  defp populate_empty_identity_id(conn) do
+    if is_nil(Plug.Conn.get_session(conn, :identity_id)) do
+      Plug.Conn.put_session(conn, :identity_id, Ecto.UUID.generate())
+    else
+      conn
+    end
   end
 end
