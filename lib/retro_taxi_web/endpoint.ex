@@ -7,6 +7,7 @@ defmodule RetroTaxiWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_retro_taxi_key",
+    max_age: 24*60*60*31, # 31 days
     signing_salt: "dNqyiboQ"
   ]
 
