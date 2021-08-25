@@ -32,11 +32,11 @@ defmodule RetroTaxi.Boards do
 
   If the request is invalid or there is an internal problem applying the request a changeset with the related errors will be returned.
   """
-  @spec process_board_creation_request(BoardCreationRequest.t()) ::
+  @spec process_board_creation_request(Changeset.t(BoardCreationRequest.t())) ::
           {:ok, Board.t(), User.t()} | {:error, String.t()}
   def process_board_creation_request(request) do
     # sanity check that the request is valid
-    case change_board_creation_request(request).valid? do
+    case request.valid? do
       false ->
         {:error, "given request was not valid"}
 

@@ -35,14 +35,16 @@ defmodule RetroTaxiWeb.BoardController do
         }
       )
 
-    case Boards.create_board(name: name) do
-      {:ok, board} ->
+    case Boards.process_board_creation_request(changeset) do
+      {:ok, board, _user} ->
         # Hardcode a identity name for facilitator
 
         redirect(conn, to: Routes.board_path(conn, :show, board.id))
 
-      {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+      {:error, reason} ->
+        conn
+        |> put_flash(:error, reason)
+        |> render("new.html", changeset: changeset)
     end
   end
 
