@@ -7,6 +7,7 @@ defmodule RetroTaxiWeb.BoardLive do
 
   @impl true
   def mount(:not_mounted_at_router, session, socket) do
+    # FIXME: Pretty sure this ! is causing a `no_return` dialyzer error.
     board = Boards.get_board!(session["board_id"], [:columns])
     {:ok, assign(socket, board: board, display_name: session["identity_id"])}
   end

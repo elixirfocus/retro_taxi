@@ -3,14 +3,13 @@ defmodule RetroTaxiWeb.BoardController do
 
   import Phoenix.LiveView.Controller
 
-  alias RetroTaxi.Boards
-  alias RetroTaxi.Boards.Board
-  alias RetroTaxi.Boards.BoardCreationRequest
+  alias RetroTaxi.BoardCreation
+  alias RetroTaxi.BoardCreation.Request, as: BoardCreationRequest
   alias RetroTaxi.Users
 
   def new(conn, _params) do
     changeset =
-      Boards.change_board_creation_request(
+      BoardCreation.change_request(
         %BoardCreationRequest{},
         %{
           facilitator_name: user_name_from_session(conn)
@@ -21,29 +20,35 @@ defmodule RetroTaxiWeb.BoardController do
   end
 
   def create(conn, %{
-        "board_creation_request" => %{"board_name" => board_name},
-        "facilitator_name" => facilitator_name
-      }) do
-    # validate the board creation request, if it looks good, make the board, update/create the session identity, redirect to board.
-
-    changeset =
-      Boards.change_board_creation_request(
-        %BoardCreationRequest{},
-        %{
-          board_name: board_name,
-          facilitator_name: facilitator_name
+        "request" => %{
+          "board_name" => board_name,
+          "facilitator_name" => facilitator_name
         }
-      )
+      }) do
+    request = %BoardCreationRequest{board_name: board_name, facilitator_name: facilitator_name}
 
-    case Boards.process_board_creation_request(changeset) do
+    # TODO: Need to add lookup for user_id
+    case BoardCreation.process_request(request, nil) do
       {:ok, board, _user} ->
-        # Hardcode a identity name for facilitator
-
         redirect(conn, to: Routes.board_path(conn, :show, board.id))
 
-      {:error, reason} ->
+      {:error, :user_not_found} ->
+        changeset =
+          BoardCreation.change_request(
+            %BoardCreationRequest{},
+            %{
+              board_name: board_name,
+              facilitator_name: facilitator_name
+            }
+          )
+
         conn
-        |> put_flash(:error, reason)
+        |> put_flash(:error, "Internal error: Expected to find user but none found.")
+        |> render("new.html", changeset: changeset)
+
+      {:error, changeset} ->
+        conn
+        |> put_flash(:error, "Could not create board.")
         |> render("new.html", changeset: changeset)
     end
   end

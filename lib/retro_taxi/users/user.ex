@@ -19,6 +19,7 @@ defmodule RetroTaxi.Users.User do
           __meta__: Ecto.Schema.Metadata.t(),
           id: id(),
           inserted_at: DateTime.t(),
+          # FIXME: Should we do `display_name` or just `name`?
           display_name: String.t(),
           updated_at: DateTime.t()
         }

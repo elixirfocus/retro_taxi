@@ -10,13 +10,24 @@
 
   <div class="my-4 flex items-center">
     <div class="w-32 text-right mr-2">
-      <%= label f, :name, class: "" %>
+      <%= label f, :board_name, class: "" %>
     </div>
     <div>
-      <%= text_input f, :name %>
-      <%= error_tag f, :name %>
+      <%= text_input f, :board_name %>
+      <%= error_tag f, :board_name %>
     </div>
   </div>
+
+  <div class="my-4 flex items-center">
+    <div class="w-32 text-right mr-2">
+      <%= label f, :facilitator_name, class: "" %>
+    </div>
+    <div>
+      <%= text_input f, :facilitator_name %>
+      <%= error_tag f, :facilitator_name %>
+    </div>
+  </div>
+  <% # might be nice to have a sub description here to help make clear, this is YOUR name as the facilitator. %>
 
   <div class="my-4 flex items-center">
     <div class="w-32 text-right mr-2">

@@ -11,6 +11,7 @@ defmodule RetroTaxi.Users do
   @doc """
   Registers a new `RetroTaxi.Users.User` entity.
   """
+  @spec register_user() :: {:ok, User.t()} | {:error, Ecto.Changeset.t(User.t())}
   def register_user() do
     # creates the new entity and returns it.
     # a user has a display name, and out of the box it should be a random

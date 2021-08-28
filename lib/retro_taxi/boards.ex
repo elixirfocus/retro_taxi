@@ -28,48 +28,6 @@ defmodule RetroTaxi.Boards do
   end
 
   @doc """
-  Creates the requested `RetroTaxi.Boards.Board` entity and updates/creates the related facilitator `RetroTaxi.Users.User` entity which has admin control over said board.
-
-  If the request is invalid or there is an internal problem applying the request a changeset with the related errors will be returned.
-  """
-  @spec process_board_creation_request(Changeset.t(BoardCreationRequest.t())) ::
-          {:ok, Board.t(), User.t()} | {:error, String.t()}
-  def process_board_creation_request(request) do
-    # sanity check that the request is valid
-    case request.valid? do
-      false ->
-        {:error, "given request was not valid"}
-
-      true ->
-        # FIXME: Should be more forgiving/informative of possible errors here. Maybe wrap in transaction?
-        {:ok, board} = create_board(request.board_name)
-        user = Users.get_user(request.facilitator_id)
-        {:ok, updated_user} = Users.update_user_display_name(user, request.facilitator_name)
-
-        {:ok, board, updated_user}
-    end
-  end
-
-  def change_board_creation_request(%BoardCreationRequest{} = request, attrs \\ %{}) do
-    types = %{
-      board_name: :string,
-      facilitator_name: :string,
-      facilitator_id: :uuid
-    }
-
-    required = [:board_name, :facilitator_name, :facilitator_id]
-
-    # TODO: Kind of sucks to duplicate validation logic here and the other entities.
-
-    changeset =
-      {request, types}
-      |> Ecto.Changeset.cast(attrs, Map.keys(types))
-      |> Ecto.Changeset.validate_required(required)
-      |> Ecto.Changeset.validate_length(:board_name, min: 1, max: 255)
-      |> Ecto.Changeset.validate_length(:facilitator_name, min: 1, max: 255)
-  end
-
-  @doc """
   Fetches a single `RetroTaxi.Boards.Board` entity from the repo where the
   primary key matches the given id.
 

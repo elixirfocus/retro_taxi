@@ -4,9 +4,17 @@ defmodule RetroTaxi.Factory do
   """
 
   use ExMachina.Ecto, repo: RetroTaxi.Repo
+
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
+  alias RetroTaxi.Users.User
+
+  def user_factory do
+    %User{
+      display_name: Faker.Pokemon.name()
+    }
+  end
 
   def board_factory do
     %Board{
