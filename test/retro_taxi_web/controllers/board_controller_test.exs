@@ -1,7 +1,8 @@
 defmodule RetroTaxiWeb.BoardControllerTest do
   use RetroTaxiWeb.ConnCase
 
-  # alias RetroTaxiWeb.ShortLinks.ShortLink
+  alias RetroTaxi.Boards
+  alias RetroTaxi.Boards.Board
 
   # GET /
   describe "new/2" do
@@ -30,6 +31,9 @@ defmodule RetroTaxiWeb.BoardControllerTest do
       conn = post(conn, Routes.board_path(conn, :new), params)
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.board_path(conn, :show, id)
+
+      assert %Board{name: "TestBoard"} = Boards.get_board!(id)
+      # TODO: Add assertion that user was updated with new name.
     end
   end
 end
