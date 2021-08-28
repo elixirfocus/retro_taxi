@@ -8,7 +8,6 @@ defmodule RetroTaxi.Boards do
   import Ecto.Query
 
   alias RetroTaxi.Boards.Board
-  alias RetroTaxi.Boards.BoardCreationRequest
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
   alias RetroTaxi.Repo
