@@ -19,8 +19,6 @@ defmodule RetroTaxiWeb.ColumnComponent do
         column_id: socket.assigns.column.id
       )
 
-    IO.inspect(topic_card, label: "added")
-
     new_list = socket.assigns.topic_cards ++ [topic_card]
     socket = assign(socket, topic_cards: new_list)
 
