@@ -7,8 +7,12 @@ defmodule RetroTaxiWeb.BoardLive do
 
   @impl true
   def mount(:not_mounted_at_router, session, socket) do
-    board = Boards.get_board!(session["board_id"], [:columns])
-    {:ok, assign(socket, board: board, display_name: session["identity_id"])}
+    board = Boards.get_board!(session["board_id"], [:facilitator, :columns])
+    {:ok, assign(socket, board: board, display_name: board.facilitator.display_name)}
+  end
+
+  def mount(_params, _session, socket) do
+    {:ok, socket}
   end
 
   @impl true

@@ -4,13 +4,22 @@ defmodule RetroTaxi.Factory do
   """
 
   use ExMachina.Ecto, repo: RetroTaxi.Repo
+
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
+  alias RetroTaxi.Users.User
+
+  def user_factory do
+    %User{
+      display_name: Faker.Pokemon.name()
+    }
+  end
 
   def board_factory do
     %Board{
       name: Faker.Lorem.word(),
+      facilitator: build(:user),
       columns: [
         build(:column, title: "Start", sort_order: 1),
         build(:column, title: "Stop", sort_order: 2),

@@ -11,6 +11,7 @@ defmodule RetroTaxi.Boards do
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
   alias RetroTaxi.Repo
+  alias RetroTaxi.Users.User
 
   @doc """
   Creates a `RetroTaxi.Boards.Board` entity with the given name and default columns.
@@ -18,10 +19,10 @@ defmodule RetroTaxi.Boards do
   Returns `{:ok, board}` when the entity has been successfully created or
   `{:error, changeset}` if their was a failure.
   """
-  @spec create_board(name: String.t()) :: {:ok, Board.t()} | {:error, Ecto.Changeset.t()}
-  def create_board(name: name) do
+  @spec create_board(String.t(), User.id()) :: {:ok, Board.t()} | {:error, Ecto.Changeset.t()}
+  def create_board(name, facilitator_id) do
     %Board{}
-    |> change_board(%{name: name})
+    |> change_board(%{name: name, facilitator_id: facilitator_id})
     |> Ecto.Changeset.put_assoc(:columns, default_columns())
     |> Repo.insert()
   end
@@ -50,8 +51,8 @@ defmodule RetroTaxi.Boards do
   @spec change_board(%Board{}, map()) :: Ecto.Changeset.t()
   def change_board(%Board{} = board, attrs \\ %{}) do
     board
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :facilitator_id])
+    |> validate_required([:name, :facilitator_id])
   end
 
   @doc """
