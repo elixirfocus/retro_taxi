@@ -3,8 +3,6 @@ defmodule RetroTaxi.BoardCreation do
   Provides functions for coordinating work related to user task of board creation.
   """
 
-  import Ecto.Changeset, only: [apply_action!: 2]
-
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.BoardCreation.Request

@@ -8,8 +8,6 @@ defmodule RetroTaxiWeb.BoardController do
   alias RetroTaxi.Users
 
   def new(conn, _params) do
-    IO.inspect(Plug.Conn.get_session(conn, :user_id), label: "debug")
-
     changeset =
       BoardCreation.change_request(
         %BoardCreationRequest{},
@@ -32,8 +30,6 @@ defmodule RetroTaxiWeb.BoardController do
     # TODO: Need to add lookup for user_id
     user_id = Plug.Conn.get_session(conn, :user_id)
 
-    IO.inspect(user_id, label: "user_id")
-
     case BoardCreation.process_request(request, user_id) do
       {:ok, board, user} ->
         # update the user_id in the session, since `process_request/2` may have created or updated the user.
@@ -53,8 +49,6 @@ defmodule RetroTaxiWeb.BoardController do
         |> render("new.html", changeset: changeset)
 
       {:error, changeset} ->
-        IO.inspect(changeset, label: "DEBUG")
-
         render(conn, "new.html", changeset: changeset)
     end
   end
