@@ -19,6 +19,7 @@ defmodule RetroTaxi.Factory do
   def board_factory do
     %Board{
       name: Faker.Lorem.word(),
+      facilitator: build(:user),
       columns: [
         build(:column, title: "Start", sort_order: 1),
         build(:column, title: "Stop", sort_order: 2),

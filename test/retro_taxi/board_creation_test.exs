@@ -84,9 +84,13 @@ defmodule RetroTaxi.BoardCreationTest do
       assert %{facilitator_name: ["can't be blank"]} = errors_on(changeset)
     end
 
-    test "failure: returns an error/reason tuple when given an invalid user_id" do
-      assert {:error, :user_not_found} =
-               BoardCreation.process_request(valid_request(), Ecto.UUID.generate())
+    test "failure: returns an error/reason tuple when given an invalid user_id and does not create the board" do
+      before_board_count = Repo.aggregate(from(b in Board), :count, :id)
+      result = BoardCreation.process_request(valid_request(), Ecto.UUID.generate())
+      after_board_count = Repo.aggregate(from(b in Board), :count, :id)
+
+      assert {:error, :user_not_found} = result
+      assert before_board_count == after_board_count
     end
 
     test "failure: when board creation fails, the previous user is not updated" do

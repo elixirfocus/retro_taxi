@@ -6,16 +6,21 @@ defmodule RetroTaxi.BoardsTest do
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
+  alias RetroTaxi.Users.User
 
   describe "create_board/2" do
     test "success: works with valid name" do
+      %User{id: facilitator_id} = insert(:user)
       valid_name = "Test Board"
-      assert {:ok, %Board{name: ^valid_name}} = Boards.create_board(name: valid_name)
+
+      assert {:ok, %Board{name: ^valid_name, facilitator_id: ^facilitator_id}} =
+               Boards.create_board(valid_name, facilitator_id)
     end
 
     test "success: new boards have expected 4 expected columns" do
+      %User{id: facilitator_id} = insert(:user)
       %{name: name} = params_for(:board)
-      assert {:ok, %Board{columns: columns}} = Boards.create_board(name: name)
+      assert {:ok, %Board{columns: columns}} = Boards.create_board(name, facilitator_id)
       assert length(columns) == 4
       assert Enum.find(columns, &match?(%Column{title: "Start", sort_order: 1}, &1))
       assert Enum.find(columns, &match?(%Column{title: "Stop", sort_order: 2}, &1))
@@ -24,8 +29,10 @@ defmodule RetroTaxi.BoardsTest do
     end
 
     test "failure: fails with invalid name" do
+      %User{id: facilitator_id} = insert(:user)
+
       invalid_name = nil
-      assert {:error, changeset} = Boards.create_board(name: invalid_name)
+      assert {:error, changeset} = Boards.create_board(invalid_name, facilitator_id)
       assert %{name: ["can't be blank"]} = errors_on(changeset)
     end
   end
@@ -49,8 +56,11 @@ defmodule RetroTaxi.BoardsTest do
     end
 
     test "success: returns a changeset for the given entity and new attributes" do
+      user = insert(:user)
       board = insert(:board)
-      assert %Changeset{} = Boards.change_board(board, %{name: "new name"})
+
+      assert %Changeset{} =
+               Boards.change_board(board, %{name: "new name", facilitator_id: user.id})
     end
   end
 
