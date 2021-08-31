@@ -1,6 +1,8 @@
 defmodule RetroTaxi.Users do
   @moduledoc """
-  TODO
+  Provides functions related to managing `RetroTaxi.Users.User` entities. Users
+  typically own and facilitate boards or are contributing members of boards,
+  adding contents and votes.
   """
 
   import Ecto.Changeset
