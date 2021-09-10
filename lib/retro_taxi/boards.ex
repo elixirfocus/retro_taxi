@@ -124,7 +124,7 @@ defmodule RetroTaxi.Boards do
   end
 
   @spec default_columns() :: list(%{title: String.t(), sort_order: non_neg_integer()})
-  defp default_columns() do
+  defp default_columns do
     [
       %{title: "Start", sort_order: 1},
       %{title: "Stop", sort_order: 2},
