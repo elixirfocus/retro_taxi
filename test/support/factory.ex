@@ -8,6 +8,7 @@ defmodule RetroTaxi.Factory do
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Boards.TopicCard
+  alias RetroTaxi.JoinBoard.UserIdentityPromptEvent
   alias RetroTaxi.Users.User
 
   def user_factory do
@@ -41,6 +42,14 @@ defmodule RetroTaxi.Factory do
     # built into `create_topic_card/2` making it use questionable.
     %TopicCard{
       content: Faker.Lorem.sentence()
+    }
+  end
+
+  def user_identity_prompt_event_factory do
+    %UserIdentityPromptEvent{
+      board: insert(:board),
+      user: insert(:user),
+      confirmed_at: DateTime.utc_now()
     }
   end
 end
