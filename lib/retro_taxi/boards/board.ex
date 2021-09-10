@@ -7,8 +7,8 @@ defmodule RetroTaxi.Boards.Board do
 
   use Ecto.Schema
 
-  alias RetroTaxi.Users.User
   alias RetroTaxi.Boards.Column
+  alias RetroTaxi.Users.User
 
   @type id :: integer()
 
@@ -29,6 +29,6 @@ defmodule RetroTaxi.Boards.Board do
     field :name, :string
     belongs_to :facilitator, User, type: :binary_id
     has_many :columns, Column
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 end

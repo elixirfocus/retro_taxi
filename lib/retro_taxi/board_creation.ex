@@ -3,12 +3,12 @@ defmodule RetroTaxi.BoardCreation do
   Provides functions for coordinating work related to user task of board creation.
   """
 
+  alias Ecto.Changeset
+  alias RetroTaxi.BoardCreation.Request
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.Board
-  alias RetroTaxi.BoardCreation.Request
   alias RetroTaxi.Users
   alias RetroTaxi.Users.User
-  alias Ecto.Changeset
 
   @doc """
   Returns an `%Ecto.Changeset{}` for the given `RetroTaxi.BoardCreation.Request`
