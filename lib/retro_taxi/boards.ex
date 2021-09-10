@@ -28,7 +28,7 @@ defmodule RetroTaxi.Boards do
   end
 
   @doc """
-  Fetches a single `RetroTaxi.Boards.Board` entity from the repo where the
+  Returns a single `RetroTaxi.Boards.Board` entity from the repo where the
   primary key matches the given id.
 
   Raises `Ecto.NoResultsError` if no entity was found.
@@ -42,6 +42,24 @@ defmodule RetroTaxi.Boards do
     Board
     |> Repo.get!(id)
     |> Repo.preload(preloads)
+  end
+
+  @doc """
+  Fetches a single `RetroTaxi.Boards.Board` entity from the repo where the
+  primary key matches the given id.
+
+  Returns `:not_found` if entity is not present in Repo.
+
+  ## Examples
+
+    iex> {:ok, board} = RetroTaxi.Boards.fetch_board(1, [:columns])
+  """
+  @spec fetch_board(integer(), keyword() | nil) :: {:ok, Board.t()} | :not_found
+  def fetch_board(id, preloads \\ []) do
+    case Repo.get(Board, id) do
+      nil -> :not_found
+      board -> {:ok, Repo.preload(board, preloads)}
+    end
   end
 
   @doc """
