@@ -5,7 +5,7 @@ defmodule RetroTaxi.Repo.Migrations.CreateBoards do
     create table(:boards) do
       add :name, :string
 
-      timestamps()
+      timestamps(type: :timestamptz)
     end
   end
 end

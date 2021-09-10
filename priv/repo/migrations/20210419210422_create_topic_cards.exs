@@ -7,7 +7,7 @@ defmodule RetroTaxi.Repo.Migrations.CreateTopicCards do
       add :sort_order, :integer
       add :column_id, references(:columns)
 
-      timestamps()
+      timestamps(type: :timestamptz)
     end
   end
 end

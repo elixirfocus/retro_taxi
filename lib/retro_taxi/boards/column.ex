@@ -36,6 +36,6 @@ defmodule RetroTaxi.Boards.Column do
 
     has_many :topic_cards, RetroTaxi.Boards.TopicCard
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 end

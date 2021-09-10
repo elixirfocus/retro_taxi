@@ -7,7 +7,7 @@ defmodule RetroTaxi.Repo.Migrations.CreateColumns do
       add :sort_order, :integer
       add :board_id, references(:boards)
 
-      timestamps()
+      timestamps(type: :timestamptz)
     end
   end
 end

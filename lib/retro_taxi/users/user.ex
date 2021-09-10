@@ -27,6 +27,6 @@ defmodule RetroTaxi.Users.User do
   schema "users" do
     field :display_name, :string
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 end

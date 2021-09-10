@@ -6,7 +6,7 @@ defmodule RetroTaxi.Repo.Migrations.CreateUsers do
       add :id, :uuid, primary_key: true
       add :display_name, :string
 
-      timestamps()
+      timestamps(type: :timestamptz)
     end
   end
 end

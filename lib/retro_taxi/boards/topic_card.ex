@@ -34,6 +34,6 @@ defmodule RetroTaxi.Boards.TopicCard do
 
     belongs_to :column, Column
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 end
