@@ -9,5 +9,7 @@ defmodule RetroTaxi.Repo.Migrations.CreateColumns do
 
       timestamps(type: :timestamptz)
     end
+
+    create(index(:columns, :board_id))
   end
 end

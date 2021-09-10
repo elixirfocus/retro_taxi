@@ -8,6 +8,8 @@ defmodule RetroTaxi.Repo.Migrations.CreateTopicCards do
       add :column_id, references(:columns)
 
       timestamps(type: :timestamptz)
+
     end
+    create(index(:topic_cards, :column_id))
   end
 end
