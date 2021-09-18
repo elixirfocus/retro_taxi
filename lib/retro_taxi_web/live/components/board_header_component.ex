@@ -6,7 +6,7 @@ defmodule RetroTaxiWeb.BoardHeaderComponent do
     <div class="lg:grid lg:grid-cols-2 lg:gap-4 mb-4">
 
       <div class="mb-4">
-        <h1 class="text-3xl font-bold">
+        <h1 class="text-3xl font-bold" id="board-name">
           <%= @board.name %>
         </h1>
       </div>

@@ -5,7 +5,9 @@ defmodule RetroTaxiWeb.BoardController do
 
   alias RetroTaxi.BoardCreation
   alias RetroTaxi.BoardCreation.Request, as: BoardCreationRequest
+  alias RetroTaxi.Boards
   alias RetroTaxi.Users
+  alias RetroTaxi.JoinBoard
 
   def new(conn, _params) do
     changeset =
@@ -54,7 +56,26 @@ defmodule RetroTaxiWeb.BoardController do
   end
 
   def show(conn, %{"id" => board_id}) do
-    live_render(conn, RetroTaxiWeb.BoardLive, session: %{"board_id" => board_id})
+    user_id = Plug.Conn.get_session(conn, :user_id)
+
+    if JoinBoard.should_prompt_user_for_identity_confirmation?(user_id, board_id) do
+      redirect(conn, to: Routes.board_path(conn, :join, board_id))
+    else
+      live_render(conn, RetroTaxiWeb.BoardLive, session: %{"board_id" => board_id})
+    end
+  end
+
+  def join(conn, %{"id" => board_id}) do
+    # find and/or create user
+    # pass the view a changeset for
+
+
+    board = Boards.get_board!(board_id, [:facilitator, :columns])
+    render(conn, "join.html", board: board)
+  end
+
+  def accept() do
+    # when they hit submit on join it will accept
   end
 
   defp user_name_from_session(conn) do

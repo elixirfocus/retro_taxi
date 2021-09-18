@@ -9,6 +9,7 @@ defmodule RetroTaxi.BoardCreation do
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.Users
   alias RetroTaxi.Users.User
+  alias RetroTaxi.JoinBoard
 
   @doc """
   Returns an `%Ecto.Changeset{}` for the given `RetroTaxi.BoardCreation.Request`
@@ -72,6 +73,7 @@ defmodule RetroTaxi.BoardCreation do
           user ->
             {:ok, board} = Boards.create_board(request.board_name, user.id)
             {:ok, updated_user} = Users.update_user_display_name(user, request.facilitator_name)
+            {:ok, _event} = JoinBoard.create_user_identity_prompt_event(updated_user.id, board.id)
             {:ok, board, updated_user}
         end
     end

@@ -1,0 +1,50 @@
+<h1 class="text-2xl font-bold">Join Board: <%= @board.name %></h1>
+
+TODO: We want to display a form that explains the board they are joining (name, who is facilitating)
+
+And ask them if they would like to join.
+
+Your Display Name: [TEXT]
+[JOIN BOARD]
+
+
+
+<%= form_for @changeset, Routes.board_path(@conn, :create), fn f -> %>
+
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Could not create board. See errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="my-4 flex items-center">
+    <div class="w-32 text-right mr-2">
+      <%= label f, :board_name, class: "" %>
+    </div>
+    <div>
+      <%= text_input f, :board_name %>
+      <%= error_tag f, :board_name %>
+    </div>
+  </div>
+
+  <div class="my-4 flex items-center">
+    <div class="w-32 text-right mr-2">
+      <%= label f, :facilitator_name, class: "" %>
+    </div>
+    <div>
+      <%= text_input f, :facilitator_name %>
+      <%= error_tag f, :facilitator_name %>
+    </div>
+  </div>
+  <% # might be nice to have a sub description here to help make clear, this is YOUR name as the facilitator. %>
+
+  <div class="my-4 flex items-center">
+    <div class="w-32 text-right mr-2">
+      <% # no label for submit %>
+    </div>
+    <div>
+      <button type="submit" class="bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-300 font-bold text-gray-900 p-2">Create Board</button>
+    </div>
+  </div>
+
+<% end %>
