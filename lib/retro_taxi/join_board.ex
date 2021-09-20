@@ -60,24 +60,6 @@ defmodule RetroTaxi.JoinBoard do
     |> Repo.insert()
   end
 
-  @spec create_user_identity_prompt_event(User.t(), Board.t(), DateTime.t() | nil) ::
-          {:ok, UserIdentityPromptEvent.t()} | {:error, Ecto.Changeset.t()}
-  def create_user_identity_prompt_event(
-        %User{id: user_id},
-        %Board{id: board_id},
-        confirmed_at \\ nil
-      ) do
-    confirmed_at = confirmed_at || DateTime.utc_now()
-
-    %UserIdentityPromptEvent{}
-    |> change_user_identity_prompt_event(%{
-      user_id: user_id,
-      board_id: board_id,
-      confirmed_at: confirmed_at
-    })
-    |> Repo.insert()
-  end
-
   @doc """
   Returns an `Ecto.Changeset` to track changes for the passed in
   `RetroTaxi.JoinBoard.UserIdentityPromptEvent` and accompanying map of attributes.
