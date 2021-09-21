@@ -10,6 +10,8 @@ defmodule RetroTaxiWeb.BoardController do
   alias RetroTaxi.JoinBoard
   alias RetroTaxi.JoinBoard.Request, as: JoinBoardRequest
 
+  plug RetroTaxiWeb.Plugs.CurrentUserAssignment when action in [:show, :join, :post_join]
+
   def new(conn, _params) do
     changeset =
       BoardCreation.change_request(
