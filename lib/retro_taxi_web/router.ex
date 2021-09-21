@@ -22,6 +22,7 @@ defmodule RetroTaxiWeb.Router do
 
     get "/board/:id", BoardController, :show
     get "/board/:id/join", BoardController, :join
+    post "/board/:id/join", BoardController, :post_join
 
     live "/sample", PageLive, :index
 

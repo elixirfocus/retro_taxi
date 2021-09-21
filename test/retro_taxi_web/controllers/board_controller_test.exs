@@ -116,6 +116,20 @@ defmodule RetroTaxiWeb.BoardControllerTest do
 
   describe "join/2" do
     test "renders identity prompt for a user who is new to a board" do
+      {:ok, board, _facilitator_user} =
+        BoardCreation.process_request(
+          %Request{board_name: "Test Board", facilitator_name: "Test Facilitator"},
+          nil
+        )
+
+      {:ok, html} =
+        conn
+        |> get(conn, Routes.board_path(conn, :join, board.id))
+        |> html_response(200)
+        |> Floki.parse_document()
+
+      assert [{"input", _, _}] = Floki.find(html, "#request_board_name")
+      assert html |> Floki.find("button[type=submit]") |> Floki.text() == "Join Board"
     end
 
     test "redirects to show the board for a user who has already seen the prompt" do

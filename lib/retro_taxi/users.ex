@@ -28,6 +28,9 @@ defmodule RetroTaxi.Users do
 
   Returns `nil` if no entity could be found.
   """
+  # FIXME: Not sure I like this `nil` pattern.
+  def get_user(nil), do: nil
+
   def get_user(id) do
     Repo.get(User, id)
   end
