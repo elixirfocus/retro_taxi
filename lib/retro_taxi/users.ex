@@ -35,7 +35,22 @@ defmodule RetroTaxi.Users do
     Repo.get(User, id)
   end
 
-  def update_user_display_name(user, new_display_name) do
+  def fetch_user(nil), do: :user_not_found
+
+  def fetch_user(id) do
+    case Repo.get(User, id) do
+      nil -> :user_not_found
+      user -> {:ok, user}
+    end
+  end
+
+  def upsert_user_display_name(nil, new_display_name) do
+    %User{}
+    |> change_user(%{display_name: new_display_name})
+    |> Repo.insert()
+  end
+
+  def upsert_user_display_name(user, new_display_name) do
     user
     |> change_user(%{display_name: new_display_name})
     |> Repo.update()

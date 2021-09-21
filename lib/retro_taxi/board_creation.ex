@@ -72,7 +72,7 @@ defmodule RetroTaxi.BoardCreation do
 
           user ->
             {:ok, board} = Boards.create_board(request.board_name, user.id)
-            {:ok, updated_user} = Users.update_user_display_name(user, request.facilitator_name)
+            {:ok, updated_user} = Users.upsert_user_display_name(user, request.facilitator_name)
             {:ok, _event} = JoinBoard.create_user_identity_prompt_event(updated_user.id, board.id)
             {:ok, board, updated_user}
         end

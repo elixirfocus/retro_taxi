@@ -7,8 +7,78 @@ defmodule RetroTaxi.JoinBoard do
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.JoinBoard.UserIdentityPromptEvent
+  alias RetroTaxi.JoinBoard.Request
   alias RetroTaxi.Repo
+  alias RetroTaxi.Users
   alias RetroTaxi.Users.User
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for the given `RetroTaxi.JoinBoard.Request`
+  value, useful for validating input.
+  """
+  @spec change_request(Request.t(), map() | nil) :: Changeset.t(Request.t())
+  def change_request(%Request{} = request, attrs \\ %{}) do
+    schema = %{
+      display_name: :string
+    }
+
+    {request, schema}
+    |> Changeset.cast(attrs, Map.keys(schema))
+    |> Changeset.validate_required([:display_name])
+    |> Changeset.validate_length(:display_name, min: 1, max: 255)
+  end
+
+  @doc """
+  Processes the join board request, creating or updating the `display_name` of
+  the user (depending on the `user_id` passed in) and additionally records a
+  `UserIdentityPromptEvent` as a record that the user has already been through
+  the join prompt.
+
+  If the request is invalid an {:error, changeset}` tuple will be returned.
+
+  If the supplied `user_id` does not reference a known `RetroTaxi.Users.User`
+  entity an error tuple of `{:error, :user_not_found}` is returned.
+  """
+  @spec process_request(Request.t(), User.id() | nil, Board.id()) ::
+          {:ok, User.t(), UserIdentityPromptEvent.t()}
+          | {:error, :user_not_found}
+          | {:error, Changeset.t(Request.t())}
+  def process_request(request, user_id, board_id) do
+    changeset = change_request(request, %{})
+
+    case changeset.valid? do
+      false ->
+        {:error, %{changeset | action: :insert}}
+
+      true ->
+        {:ok, {user, event}} =
+          Repo.transaction(fn ->
+            {:ok, updated_user} = upsert_user(user_id, request.display_name)
+            IO.inspect(updated_user, label: "updated_user")
+            {:ok, event} = create_user_identity_prompt_event(updated_user.id, board_id)
+            {updated_user, event}
+          end)
+
+        {:ok, user, event}
+    end
+  end
+
+  # Creates or updates a `RetroTaxi.Users.User` entity given a `user_id` value,
+  # which can be nil, with the given `display_name`.
+  defp upsert_user(nil, new_display_name) do
+    {:ok, new_user} = Users.register_user()
+    Users.upsert_user_display_name(new_user, new_display_name)
+  end
+
+  defp upsert_user(user_id, new_display_name) do
+    case Users.get_user(user_id) do
+      nil ->
+        {:error, :user_not_found}
+
+      user ->
+        Users.upsert_user_display_name(user, new_display_name)
+    end
+  end
 
   @doc """
   Given a `RetroTaxi.Boards.Board` id and a `RetroTaxi.Users.User` id, returns a
