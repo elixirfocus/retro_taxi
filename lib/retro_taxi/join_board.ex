@@ -53,7 +53,6 @@ defmodule RetroTaxi.JoinBoard do
         {:ok, {user, event}} =
           Repo.transaction(fn ->
             {:ok, updated_user} = upsert_user(user_id, request.display_name)
-            IO.inspect(updated_user, label: "updated_user")
             {:ok, event} = create_user_identity_prompt_event(updated_user.id, board_id)
             {updated_user, event}
           end)
