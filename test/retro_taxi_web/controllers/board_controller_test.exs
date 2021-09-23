@@ -5,6 +5,8 @@ defmodule RetroTaxiWeb.BoardControllerTest do
   alias RetroTaxi.Boards.Board
   alias RetroTaxi.BoardCreation
   alias RetroTaxi.BoardCreation.Request
+  alias RetroTaxi.JoinBoard
+  alias RetroTaxi.JoinBoard.Request, as: JoinBoardRequest
 
   # GET /
   describe "new/2" do
@@ -115,7 +117,7 @@ defmodule RetroTaxiWeb.BoardControllerTest do
   end
 
   describe "join/2" do
-    test "renders identity prompt for a user who is new to a board" do
+    test "renders to identity prompt for a user who is new to a board", %{conn: conn} do
       {:ok, board, _facilitator_user} =
         BoardCreation.process_request(
           %Request{board_name: "Test Board", facilitator_name: "Test Facilitator"},
@@ -124,18 +126,36 @@ defmodule RetroTaxiWeb.BoardControllerTest do
 
       {:ok, html} =
         conn
-        |> get(conn, Routes.board_path(conn, :join, board.id))
+        |> get(Routes.board_path(conn, :join, board.id))
         |> html_response(200)
         |> Floki.parse_document()
 
-      assert [{"input", _, _}] = Floki.find(html, "#request_board_name")
+      assert [{"input", _, _}] = Floki.find(html, "#request_display_name")
       assert html |> Floki.find("button[type=submit]") |> Floki.text() == "Join Board"
     end
 
-    test "redirects to show the board for a user who has already seen the prompt" do
+    test "redirects to show the board for a user who has already seen the prompt", %{conn: conn} do
+      # FIXME: For now I'll prepare state to "fake" the pre-test behavior, but
+      # ideally I want to rethink these tests.
+      {:ok, board, _facilitator_user} =
+        BoardCreation.process_request(
+          %Request{board_name: "Test Board", facilitator_name: "Test Facilitator"},
+          nil
+        )
+
+      %{display_name: valid_display_name} = params_for(:user)
+      request = %JoinBoardRequest{display_name: valid_display_name}
+      {:ok, participant_user, _event} = JoinBoard.process_request(request, nil, board.id)
+      conn = Plug.Test.init_test_session(conn, user_id: participant_user.id)
+
+      conn = get(conn, Routes.board_path(conn, :join, board.id))
+      assert redirected_to(conn) == Routes.board_path(conn, :show, board.id)
     end
 
-    test "renders a 404 when no board for the given id is passed in" do
+    test "renders a 404 when no board for the given id is passed in", %{conn: conn} do
+      assert_error_sent 404, fn ->
+        get(conn, Routes.board_path(conn, :join, "999"))
+      end
     end
   end
 end
