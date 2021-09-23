@@ -1,12 +1,5 @@
 <h1 class="text-2xl font-bold">Join Board: <%= @board.name %></h1>
 
-<%# TODO: We want to display a form that explains the board they are joining (name, who is facilitating)
-
-And ask them if they would like to join.
-
-Your Display Name: [TEXT]
-[JOIN BOARD] %>
-
 <%= form_for @changeset, Routes.board_path(@conn, :post_join, @board.id), fn f -> %>
 
   <%= if @changeset.action do %>
