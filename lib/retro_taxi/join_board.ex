@@ -29,19 +29,18 @@ defmodule RetroTaxi.JoinBoard do
   end
 
   @doc """
-  Processes the join board request, creating or updating the `display_name` of
-  the user (depending on the `user_id` passed in) and additionally records a
-  `UserIdentityPromptEvent` as a record that the user has already been through
-  the join prompt.
+  Processes the join board request, creating or updating a
+  `RetroTaxi.Users.User` (depending on the `user_id` passed in) and their
+  `display_name`. Additionally records a `UserIdentityPromptEvent` as a record
+  that the user has already been through the join prompt.
 
   If the request is invalid an {:error, changeset}` tuple will be returned.
 
-  If the supplied `user_id` does not reference a known `RetroTaxi.Users.User`
-  entity an error tuple of `{:error, :user_not_found}` is returned.
+  The incoming `user_id` is expected to be nil or match an existing stored
+  entity. If an invalid id is passed in an `MatchError` will be thrown.
   """
   @spec process_request(Request.t(), User.id() | nil, Board.id()) ::
           {:ok, User.t(), UserIdentityPromptEvent.t()}
-          | {:error, :user_not_found}
           | {:error, Changeset.t(Request.t())}
   def process_request(request, user_id, board_id) do
     changeset = change_request(request, %{})

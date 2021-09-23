@@ -81,16 +81,14 @@ defmodule RetroTaxiWeb.BoardController do
   end
 
   def post_join(conn, %{"id" => board_id, "request" => %{"display_name" => display_name}}) do
+    # While board may not be needed until we render, we want to bang get the
+    # resource right away, generating a quick 404 response should a rogue HTTP
+    # request come in.
     board = Boards.get_board!(board_id)
     user_id = Plug.Conn.get_session(conn, :user_id)
     request = %JoinBoardRequest{display_name: display_name}
 
     case JoinBoard.process_request(request, user_id, board_id) do
-      {:error, :user_not_found} ->
-        conn
-        |> put_flash(:error, "Internal error: Expected to find user but none found.")
-        |> redirect(to: Routes.board_path(conn, :join, board_id))
-
       {:error, changeset} ->
         render(conn, "join.html", board: board, changeset: changeset)
 
