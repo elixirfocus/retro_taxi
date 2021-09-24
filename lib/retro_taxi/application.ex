@@ -14,7 +14,9 @@ defmodule RetroTaxi.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: RetroTaxi.PubSub},
       # Start the Endpoint (http/https)
-      RetroTaxiWeb.Endpoint
+      RetroTaxiWeb.Endpoint,
+      # Start Presence
+      RetroTaxiWeb.Presence
       # Start a worker by calling: RetroTaxi.Worker.start_link(arg)
       # {RetroTaxi.Worker, arg}
     ]

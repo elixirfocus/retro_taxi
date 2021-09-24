@@ -12,9 +12,11 @@ defmodule RetroTaxiWeb.BoardHeaderComponent do
       </div>
 
       <div class="lg:text-right">
-        <div class="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-gray-300 text-gray-800 mb-2">
-          <%= @display_name %>
-        </div>
+       <%= for user <- @users do %>
+          <div class="inline-flex items-center px-3 py-2 rounded-full   text-sm font-medium bg-gray-300 text-gray-800 mb-2">
+            <%= user.display_name %>
+          </div>
+        <% end %>
       </div>
     </div>
     """

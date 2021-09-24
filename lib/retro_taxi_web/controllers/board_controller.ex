@@ -62,7 +62,10 @@ defmodule RetroTaxiWeb.BoardController do
     if JoinBoard.should_prompt_user_for_identity_confirmation?(user_id, board_id) do
       redirect(conn, to: Routes.board_path(conn, :join, board_id))
     else
-      live_render(conn, RetroTaxiWeb.BoardLive, session: %{"board_id" => board_id})
+      # We expect a user by this point.
+      current_user = Users.get_user(user_id)
+      session = %{"board_id" => board_id, "current_user" => current_user}
+      live_render(conn, RetroTaxiWeb.BoardLive, session: session)
     end
   end
 
