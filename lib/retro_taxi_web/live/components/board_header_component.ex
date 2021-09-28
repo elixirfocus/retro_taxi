@@ -9,6 +9,7 @@ defmodule RetroTaxiWeb.BoardHeaderComponent do
         <h1 class="text-3xl font-bold" id="board-name">
           <%= @board.name %>
         </h1>
+        <p>Facilitator: <%= @board.facilitator.display_name %></p>
       </div>
 
       <div class="lg:text-right">
