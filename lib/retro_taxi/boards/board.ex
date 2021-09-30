@@ -22,11 +22,14 @@ defmodule RetroTaxi.Boards.Board do
           facilitator_id: User.id(),
           inserted_at: DateTime.t(),
           name: String.t(),
+          phase: :capture | :vote | :discuss,
           updated_at: DateTime.t()
         }
 
   schema "boards" do
     field :name, :string
+    field :phase, Ecto.Enum, values: [:capture, :vote, :discuss], default: :capture
+
     belongs_to :facilitator, User, type: :binary_id
     has_many :columns, Column
     timestamps(type: :utc_datetime)

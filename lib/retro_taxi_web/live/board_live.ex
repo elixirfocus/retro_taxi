@@ -10,6 +10,8 @@ defmodule RetroTaxiWeb.BoardLive do
 
   @impl true
   def mount(:not_mounted_at_router, session, socket) do
+    if connected?(socket), do: Boards.subscribe()
+
     board = Boards.get_board!(session["board_id"], [:facilitator, :columns])
     current_user = session["current_user"]
 
@@ -45,6 +47,10 @@ defmodule RetroTaxiWeb.BoardLive do
     {:noreply, socket}
   end
 
+  def handle_info({:board_updated, board}, socket) when socket.assigns.board.id == board.id do
+    {:noreply, update(socket, :board, fn _current_board -> board end)}
+  end
+
   @impl true
   def handle_info(
         %{event: "presence_diff", payload: _payload},
@@ -67,6 +73,7 @@ defmodule RetroTaxiWeb.BoardLive do
     # currently live in `BoardHeaderComponent`.
     ~L"""
     <%= live_component @socket, RetroTaxiWeb.BoardHeaderComponent, board: @board, users: @users %>
+    <%= live_component @socket, RetroTaxiWeb.PhaseDisplayComponent, id: @board.id, board: @board %>
 
     <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 

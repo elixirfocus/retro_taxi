@@ -13,6 +13,24 @@ defmodule RetroTaxi.Boards do
   alias RetroTaxi.Repo
   alias RetroTaxi.Users.User
 
+  @topic inspect(__MODULE__)
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(RetroTaxi.PubSub, @topic)
+  end
+
+  defp broadcast({:ok, board}, event) do
+    Phoenix.PubSub.broadcast(
+      RetroTaxi.PubSub,
+      @topic,
+      {event, board}
+    )
+
+    {:ok, board}
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
   @doc """
   Creates a `RetroTaxi.Boards.Board` entity with the given name and default columns.
 
@@ -25,6 +43,7 @@ defmodule RetroTaxi.Boards do
     |> change_board(%{name: name, facilitator_id: facilitator_id})
     |> Ecto.Changeset.put_assoc(:columns, default_columns())
     |> Repo.insert()
+    |> broadcast(:board_created)
   end
 
   @doc """
@@ -69,8 +88,23 @@ defmodule RetroTaxi.Boards do
   @spec change_board(%Board{}, map()) :: Ecto.Changeset.t()
   def change_board(%Board{} = board, attrs \\ %{}) do
     board
-    |> cast(attrs, [:name, :facilitator_id])
-    |> validate_required([:name, :facilitator_id])
+    |> cast(attrs, [:name, :facilitator_id, :phase])
+    |> validate_required([:name, :facilitator_id, :phase])
+  end
+
+  @spec update_board_phase(Board.t()) :: {:ok, Board.t()} | {:error, Ecto.Changeset.t()}
+  def update_board_phase(%Board{phase: :capture} = board) do
+    board
+    |> change_board(%{phase: :vote})
+    |> Repo.update()
+    |> broadcast(:board_updated)
+  end
+
+  def update_board_phase(%Board{phase: :vote} = board) do
+    board
+    |> change_board(%{phase: :discuss})
+    |> Repo.update()
+    |> broadcast(:board_updated)
   end
 
   @doc """
