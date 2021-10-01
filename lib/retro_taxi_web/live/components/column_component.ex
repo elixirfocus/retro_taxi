@@ -53,9 +53,15 @@ defmodule RetroTaxiWeb.ColumnComponent do
     {:noreply, socket}
   end
 
+  def handle_info({:topic_card_created, topic_card}, socket)
+      when socket.assigns.column_id == topic_card.column_id do
+    IO.inspect("topic_card_created")
+    {:noreply, socket}
+  end
+
   def render(assigns) do
     ~L"""
-    <div class="bg-gray-200 p-2 my-2">
+    <div id="column-<%= @column.id %>" class="bg-gray-200 p-2 my-2">
 
       <h2 class="text-2xl font-bold">
         <%= @column.title %>

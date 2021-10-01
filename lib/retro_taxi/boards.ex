@@ -13,20 +13,26 @@ defmodule RetroTaxi.Boards do
   alias RetroTaxi.Repo
   alias RetroTaxi.Users.User
 
+  # FIXME: Ideally we would make a topic with the board id, but I am struggling
+  # with deeply nested components inside of BoardLive which will call functions
+  # like `update_topic_card/2` and thus need to inform the LiveView. The problem
+  # being, a component can not listen for PubSub so it has to be handled at the
+  # parent LiveView level, but asking a function like `update_topic_card/2` to
+  # also have the board id feels very bad. Feedback/ideas welcome.
   @topic inspect(__MODULE__)
 
-  def subscribe do
+  def subscribe() do
     Phoenix.PubSub.subscribe(RetroTaxi.PubSub, @topic)
   end
 
-  defp broadcast({:ok, board}, event) do
+  defp broadcast({:ok, entity}, event) do
     Phoenix.PubSub.broadcast(
       RetroTaxi.PubSub,
       @topic,
-      {event, board}
+      {event, entity}
     )
 
-    {:ok, board}
+    {:ok, entity}
   end
 
   defp broadcast({:error, _reason} = error, _event), do: error
@@ -107,6 +113,12 @@ defmodule RetroTaxi.Boards do
     |> broadcast(:board_updated)
   end
 
+  def list_columns(board_id, preloads \\ []) do
+    Repo.all(
+      from c in Column, where: c.board_id == ^board_id, order_by: c.sort_order, preload: ^preloads
+    )
+  end
+
   @doc """
   Creates a `RetroTaxi.Boards.TopicCard` entity with for the given column the
   given content.
@@ -131,16 +143,19 @@ defmodule RetroTaxi.Boards do
     %TopicCard{}
     |> change_topic_card(topic_card_attr)
     |> Repo.insert()
+    |> broadcast(:topic_card_created)
   end
 
   def update_topic_card(topic_card, attrs) do
     topic_card
     |> change_topic_card(attrs)
     |> Repo.update()
+    |> broadcast(:topic_card_updated)
   end
 
   def delete_topic_card(topic_card) do
     Repo.delete(topic_card)
+    |> broadcast(:topic_card_deleted)
   end
 
   @doc """

@@ -67,36 +67,36 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
 
   def render(assigns) do
     ~L"""
-      <%= if @is_editing do %>
-        <div class="bg-yellow-100 p-0 my-2">
-          <%= f = form_for @changeset, "#", phx_submit: "save", phx_target: @myself %>
-            <%= textarea f, :content, class: "text-gray-900 mt-1 p-2 block w-full rounded-md bg-transparent border-transparent focus:border-transparent focus:ring-0 ring-0", rows: "3" %>
+      <div id="topic-card-<%= @topic_card.id %>">
+        <%= if @is_editing do %>
+          <div class="bg-yellow-100 p-0 my-2">
+            <%= f = form_for @changeset, "#", phx_submit: "save", phx_target: @myself %>
+              <%= textarea f, :content, class: "text-gray-900 mt-1 p-2 block w-full rounded-md bg-transparent border-transparent focus:border-transparent focus:ring-0 ring-0", rows: "3" %>
 
-            <div class="flex justify-between items-end mt-2 p-2">
-              <div>
-                <%= live_component @socket, RetroTaxiWeb.CloseButtonComponent, target: @myself, click_event: "cancel-editing" %>
-                <%= live_component @socket, RetroTaxiWeb.TrashButtonComponent, target: @myself, click_event: "delete" %>
+              <div class="flex justify-between items-end mt-2 p-2">
+                <div>
+                  <%= live_component @socket, RetroTaxiWeb.CloseButtonComponent, target: @myself, click_event: "cancel-editing" %>
+                  <%= live_component @socket, RetroTaxiWeb.TrashButtonComponent, target: @myself, click_event: "delete" %>
+                </div>
+                <%= live_component @socket, RetroTaxiWeb.SubmitButtonComponent, title: "Save Card" %>
               </div>
-              <%= live_component @socket, RetroTaxiWeb.SubmitButtonComponent, title: "Save Card" %>
-            </div>
 
-          </form>
-        </div>
-      <% else %>
+            </form>
+          </div>
+        <% else %>
 
-      <div class="bg-blue-500 p-2 my-2">
-        <div class="text-gray-50 font-medium">
-          <%= @topic_card.content %>
-        </div>
+        <div class="bg-blue-500 p-2 my-2">
+          <div class="text-gray-50 font-medium">
+            <%= @topic_card.content %>
+          </div>
 
-        <div class="flex justify-between items-end mt-2">
-          <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "start-editing" %>
-          <%= live_component @socket, RetroTaxiWeb.VoteButtonComponent %>
+          <div class="flex justify-between items-end mt-2">
+            <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "start-editing" %>
+            <%= live_component @socket, RetroTaxiWeb.VoteButtonComponent %>
+          </div>
         </div>
+        <% end %>
       </div>
-      <% end %>
-
-
     """
   end
 end
