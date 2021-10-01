@@ -25,16 +25,19 @@ defmodule RetroTaxiWeb.PhaseDisplayComponent do
       <%= if @board.phase == :capture do %>
         <p>We are currently capturing our observations. Please compose topics for things you feel the team should <strong>Start Doing</strong>, <strong>Stop Doing</strong> or <strong>Continue to Do</strong>.</p>
 
-        <p>Facilitator: When you have confirmation people are done composing topics, move the board into the Voting phase.</p>
+        <%= if @show_facilitator_tools do %>
+          <p>Facilitator: When you have confirmation people are done composing topics, move the board into the Voting phase.</p>
 
-        <div>
-          <button phx-click="start_voting_phase" phx-target="<%= @myself %>"
-          class="bg-green-600 active:bg-green-700 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
-            <div class="ml-1">
-              Start Voting Phase
-            </div>
-          </button>
-        </div>
+          <div>
+            <button phx-click="start_voting_phase" phx-target="<%= @myself %>"
+            class="bg-green-600 active:bg-green-700 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
+              <div class="ml-1">
+                Start Voting Phase
+              </div>
+            </button>
+          </div>
+        <% end %>
+
       <% end %>
 
       <%= if @board.phase == :vote do %>

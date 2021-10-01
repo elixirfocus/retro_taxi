@@ -99,7 +99,7 @@ defmodule RetroTaxiWeb.BoardLive do
     <div id="board-<%= @board.id %>">
 
       <%= live_component @socket, RetroTaxiWeb.BoardHeaderComponent, board: @board, users: @users %>
-      <%= live_component @socket, RetroTaxiWeb.PhaseDisplayComponent, id: @board.id, board: @board %>
+      <%= live_component @socket, RetroTaxiWeb.PhaseDisplayComponent, id: @board.id, board: @board, show_facilitator_tools: @current_user.id == @board.facilitator_id %>
 
       <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 
