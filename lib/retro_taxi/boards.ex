@@ -13,29 +13,25 @@ defmodule RetroTaxi.Boards do
   alias RetroTaxi.Repo
   alias RetroTaxi.Users.User
 
-  # FIXME: Ideally we would make a topic with the board id, but I am struggling
-  # with deeply nested components inside of BoardLive which will call functions
-  # like `update_topic_card/2` and thus need to inform the LiveView. The problem
-  # being, a component can not listen for PubSub so it has to be handled at the
-  # parent LiveView level, but asking a function like `update_topic_card/2` to
-  # also have the board id feels very bad. Feedback/ideas welcome.
-  @topic inspect(__MODULE__)
-
-  def subscribe() do
-    Phoenix.PubSub.subscribe(RetroTaxi.PubSub, @topic)
+  def topic(board_id) do
+    "board:#{board_id}"
   end
 
-  defp broadcast({:ok, entity}, event) do
+  def subscribe(board_id) do
+    Phoenix.PubSub.subscribe(RetroTaxi.PubSub, topic(board_id))
+  end
+
+  defp broadcast({:ok, entity}, event, board_id) do
     Phoenix.PubSub.broadcast(
       RetroTaxi.PubSub,
-      @topic,
+      topic(board_id),
       {event, entity}
     )
 
     {:ok, entity}
   end
 
-  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:error, _reason} = error, _event, _board_id), do: error
 
   @doc """
   Creates a `RetroTaxi.Boards.Board` entity with the given name and default columns.
@@ -102,14 +98,14 @@ defmodule RetroTaxi.Boards do
     board
     |> change_board(%{phase: :vote})
     |> Repo.update()
-    |> broadcast(:board_phase_updated)
+    |> broadcast(:board_phase_updated, board.id)
   end
 
   def update_board_phase(%Board{phase: :vote} = board) do
     board
     |> change_board(%{phase: :discuss})
     |> Repo.update()
-    |> broadcast(:board_phase_updated)
+    |> broadcast(:board_phase_updated, board.id)
   end
 
   def list_columns(board_id, preloads \\ []) do
@@ -117,6 +113,17 @@ defmodule RetroTaxi.Boards do
       from c in Column, where: c.board_id == ^board_id, order_by: c.sort_order, preload: ^preloads
     )
   end
+
+  defp broadcast_topic_card_event({:ok, topic_card}, event) do
+    # Since the LiveView client will be subscribed to the `board:<ID>`, we need
+    # to know that value when broadcasting an event. This feels clunky but not
+    # sure what would be better.
+    # FIXME: Curious if this will work with "deleted" topic cards.
+    topic_card = Repo.preload(topic_card, [:column])
+    broadcast({:ok, topic_card}, event, topic_card.column.board_id)
+  end
+
+  defp broadcast_topic_card_event({:error, _reason} = error, _event), do: error
 
   @doc """
   Creates a `RetroTaxi.Boards.TopicCard` entity with for the given column the
@@ -142,19 +149,19 @@ defmodule RetroTaxi.Boards do
     %TopicCard{}
     |> change_topic_card(topic_card_attr)
     |> Repo.insert()
-    |> broadcast(:topic_card_created)
+    |> broadcast_topic_card_event(:topic_card_created)
   end
 
   def update_topic_card(topic_card, attrs) do
     topic_card
     |> change_topic_card(attrs)
     |> Repo.update()
-    |> broadcast(:topic_card_updated)
+    |> broadcast_topic_card_event(:topic_card_updated)
   end
 
   def delete_topic_card(topic_card) do
     Repo.delete(topic_card)
-    |> broadcast(:topic_card_deleted)
+    |> broadcast_topic_card_event(:topic_card_deleted)
   end
 
   @doc """

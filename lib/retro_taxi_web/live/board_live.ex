@@ -10,10 +10,11 @@ defmodule RetroTaxiWeb.BoardLive do
 
   @impl true
   def mount(:not_mounted_at_router, session, socket) do
-    if connected?(socket), do: Boards.subscribe()
     board = Boards.get_board!(session["board_id"], [:facilitator])
     current_user = session["current_user"]
     columns = Boards.list_columns(board.id, [:topic_cards])
+
+    if connected?(socket), do: Boards.subscribe(board.id)
 
     Presence.track(
       self(),
