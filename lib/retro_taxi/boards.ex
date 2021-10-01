@@ -102,14 +102,14 @@ defmodule RetroTaxi.Boards do
     board
     |> change_board(%{phase: :vote})
     |> Repo.update()
-    |> broadcast(:board_updated)
+    |> broadcast(:board_phase_updated)
   end
 
   def update_board_phase(%Board{phase: :vote} = board) do
     board
     |> change_board(%{phase: :discuss})
     |> Repo.update()
-    |> broadcast(:board_updated)
+    |> broadcast(:board_phase_updated)
   end
 
   def list_columns(board_id, preloads \\ []) do

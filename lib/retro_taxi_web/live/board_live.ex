@@ -43,7 +43,8 @@ defmodule RetroTaxiWeb.BoardLive do
     {:ok, socket}
   end
 
-  def handle_info({:board_updated, board}, socket) when socket.assigns.board.id == board.id do
+  def handle_info({:board_phase_updated, board}, socket)
+      when socket.assigns.board.id == board.id do
     {:noreply, update(socket, :board, fn _current_board -> board end)}
   end
 
