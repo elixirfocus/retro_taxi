@@ -46,7 +46,10 @@ defmodule RetroTaxiWeb.BoardLive do
 
   def handle_info({:board_phase_updated, board}, socket)
       when socket.assigns.board.id == board.id do
-    {:noreply, update(socket, :board, fn _current_board -> board end)}
+    {:noreply,
+     update(socket, :board, fn current_board ->
+       %{current_board | phase: board.phase}
+     end)}
   end
 
   def handle_info({:topic_card_created, topic_card}, socket) do
@@ -101,7 +104,7 @@ defmodule RetroTaxiWeb.BoardLive do
       <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 
       <%= for column <- @columns do %>
-        <%= live_component @socket, RetroTaxiWeb.ColumnComponent, id: column.id, column: column %>
+        <%= live_component @socket, RetroTaxiWeb.ColumnComponent, id: column.id, column: column, board_phase: @board.phase %>
       <% end %>
 
       </div>
