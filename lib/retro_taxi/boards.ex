@@ -49,7 +49,6 @@ defmodule RetroTaxi.Boards do
     |> change_board(%{name: name, facilitator_id: facilitator_id})
     |> Ecto.Changeset.put_assoc(:columns, default_columns())
     |> Repo.insert()
-    |> broadcast(:board_created)
   end
 
   @doc """
