@@ -10,7 +10,8 @@ defmodule RetroTaxi.Boards.Board do
   alias RetroTaxi.Boards.Column
   alias RetroTaxi.Users.User
 
-  @type id :: integer()
+  @type id :: Ecto.UUID.t()
+  @primary_key {:id, :binary_id, autogenerate: true}
 
   @typedoc """
   TODO
@@ -18,7 +19,7 @@ defmodule RetroTaxi.Boards.Board do
   @type t :: %__MODULE__{
           __meta__: Ecto.Schema.Metadata.t(),
           columns: [Column.t()],
-          id: id(),
+          id: Ecto.UUID.t(),
           facilitator_id: User.id(),
           inserted_at: DateTime.t(),
           name: String.t(),

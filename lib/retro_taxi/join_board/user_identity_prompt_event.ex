@@ -30,7 +30,7 @@ defmodule RetroTaxi.JoinBoard.UserIdentityPromptEvent do
     field :confirmed_at, :utc_datetime
 
     belongs_to :user, User, type: :binary_id
-    belongs_to :board, Board
+    belongs_to :board, Board, type: :binary_id
 
     timestamps(type: :utc_datetime)
   end
