@@ -154,7 +154,7 @@ defmodule RetroTaxiWeb.BoardControllerTest do
 
     test "renders a 404 when no board for the given id is passed in", %{conn: conn} do
       assert_error_sent 404, fn ->
-        get(conn, Routes.board_path(conn, :join, "999"))
+        get(conn, Routes.board_path(conn, :join, "9968b41f-39cd-4ce1-aa55-cdf4a8f785f7"))
       end
     end
   end
