@@ -5,7 +5,7 @@ defmodule RetroTaxi.Repo.Migrations.CreateUserIdentityPromptEvents do
     create table(:user_identity_prompt_events, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :user_id, references(:users, type: :uuid, on_delete: :nothing)
-      add :board_id, references(:boards)
+      add :board_id, references(:boards, type: :uuid)
       add(:confirmed_at, :timestamptz)
 
       timestamps(type: :timestamptz)

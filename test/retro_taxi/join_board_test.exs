@@ -28,16 +28,14 @@ defmodule RetroTaxi.JoinBoardTest do
     end
 
     test "failure: return :board_not_found when a board can not be found." do
-      random_number = :rand.uniform(9999)
-
-      assert JoinBoard.should_prompt_user_for_identity_confirmation?(nil, random_number) ==
+      assert JoinBoard.should_prompt_user_for_identity_confirmation?(nil, "20f17037-69dc-402e-8acf-b6f9a5fb732a") ==
                :board_not_found
 
       %User{id: user_id} = insert(:user)
 
       assert JoinBoard.should_prompt_user_for_identity_confirmation?(
                user_id,
-               random_number
+               "20f17037-69dc-402e-8acf-b6f9a5fb732a"
              ) == :board_not_found
     end
   end

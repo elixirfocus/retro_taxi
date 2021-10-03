@@ -45,7 +45,7 @@ defmodule RetroTaxi.BoardsTest do
 
     test "failure: raises `Ecto.NoResultsError` when given an invalid id" do
       assert_raise Ecto.NoResultsError, fn ->
-        assert _will_fail = Boards.get_board!(System.unique_integer())
+        assert _will_fail = Boards.get_board!("20f17037-69dc-402e-8acf-b6f9a5fb732a")
       end
     end
   end

@@ -32,7 +32,7 @@ defmodule RetroTaxi.Boards.Column do
     field :sort_order, :integer
     field :title, :string
 
-    belongs_to :board, RetroTaxi.Boards.Board
+    belongs_to :board, RetroTaxi.Boards.Board, type: :binary_id
 
     has_many :topic_cards, RetroTaxi.Boards.TopicCard
 
