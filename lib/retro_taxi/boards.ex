@@ -55,9 +55,9 @@ defmodule RetroTaxi.Boards do
 
   ## Examples
 
-    iex> board = RetroTaxi.Boards.get_board!(1, [:columns])
+    iex> board = RetroTaxi.Boards.get_board!("db1c138b-76b2-462c-a6a1-6696b5180aba", [:columns])
   """
-  @spec get_board!(integer(), keyword() | nil) :: Board.t()
+  @spec get_board!(Board.id(), keyword() | nil) :: Board.t()
   def get_board!(id, preloads \\ []) do
     Board
     |> Repo.get!(id)
@@ -72,9 +72,9 @@ defmodule RetroTaxi.Boards do
 
   ## Examples
 
-    iex> {:ok, board} = RetroTaxi.Boards.fetch_board(1, [:columns])
+    iex> {:ok, board} = RetroTaxi.Boards.fetch_board("db1c138b-76b2-462c-a6a1-6696b5180aba", [:columns])
   """
-  @spec fetch_board(integer(), keyword() | nil) :: {:ok, Board.t()} | :not_found
+  @spec fetch_board(Board.id(), keyword() | nil) :: {:ok, Board.t()} | :not_found
   def fetch_board(id, preloads \\ []) do
     case Repo.get(Board, id) do
       nil -> :not_found
