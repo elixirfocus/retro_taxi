@@ -6,8 +6,8 @@ defmodule RetroTaxi.JoinBoard do
   alias Ecto.Changeset
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.Board
-  alias RetroTaxi.JoinBoard.UserIdentityPromptEvent
   alias RetroTaxi.JoinBoard.Request
+  alias RetroTaxi.JoinBoard.UserIdentityPromptEvent
   alias RetroTaxi.Repo
   alias RetroTaxi.Users
   alias RetroTaxi.Users.User

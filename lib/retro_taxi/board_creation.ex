@@ -7,9 +7,9 @@ defmodule RetroTaxi.BoardCreation do
   alias RetroTaxi.BoardCreation.Request
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.Board
+  alias RetroTaxi.JoinBoard
   alias RetroTaxi.Users
   alias RetroTaxi.Users.User
-  alias RetroTaxi.JoinBoard
 
   @doc """
   Returns an `%Ecto.Changeset{}` for the given `RetroTaxi.BoardCreation.Request`

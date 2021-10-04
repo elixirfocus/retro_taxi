@@ -1,10 +1,10 @@
 defmodule RetroTaxiWeb.BoardControllerTest do
   use RetroTaxiWeb.ConnCase
 
-  alias RetroTaxi.Boards
-  alias RetroTaxi.Boards.Board
   alias RetroTaxi.BoardCreation
   alias RetroTaxi.BoardCreation.Request
+  alias RetroTaxi.Boards
+  alias RetroTaxi.Boards.Board
   alias RetroTaxi.JoinBoard
   alias RetroTaxi.JoinBoard.Request, as: JoinBoardRequest
 

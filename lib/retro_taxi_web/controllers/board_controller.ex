@@ -6,9 +6,9 @@ defmodule RetroTaxiWeb.BoardController do
   alias RetroTaxi.BoardCreation
   alias RetroTaxi.BoardCreation.Request, as: BoardCreationRequest
   alias RetroTaxi.Boards
-  alias RetroTaxi.Users
   alias RetroTaxi.JoinBoard
   alias RetroTaxi.JoinBoard.Request, as: JoinBoardRequest
+  alias RetroTaxi.Users
 
   def new(conn, _params) do
     changeset =
