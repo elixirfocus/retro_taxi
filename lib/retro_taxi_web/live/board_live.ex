@@ -53,19 +53,19 @@ defmodule RetroTaxiWeb.BoardLive do
   end
 
   def handle_info({:topic_card_created, topic_card}, socket) do
-    IO.inspect("topic_card_created")
     # FIXME: For now we are using a generic `boards` topic name so we'll need to
     # filter here to make sure we only react to topic cards that are present on
     # this board.
+    # FIXME: I think this was address recently and this filter can be removed.
 
     column_ids = Enum.map(socket.assigns.columns, & &1.id)
-    IO.inspect(column_ids, label: "column_ids")
-    IO.inspect(topic_card.column_id, label: "topic_card.column_id")
 
     if topic_card.column_id in column_ids do
       # If a topic card of this board, reload the board.
 
-      # I feel like I need to maybe update a collection of columns on the liveview and have the columns be preloaded with the topic cards so I can properly kick the liveview change tracking with this call.
+      # I feel like I need to maybe update a collection of columns on the
+      # liveview and have the columns be preloaded with the topic cards so I can
+      # properly kick the liveview change tracking with this call.
       {:noreply,
        update(socket, :columns, fn _current_columns ->
          Boards.list_columns(socket.assigns.board.id, [:topic_cards])
@@ -78,7 +78,7 @@ defmodule RetroTaxiWeb.BoardLive do
   @impl true
   def handle_info(
         %{event: "presence_diff", payload: _payload},
-        socket = %{assigns: %{board: board}}
+        %{assigns: %{board: board}} = socket
       ) do
     users =
       Presence.list(presence_topic(board.id))

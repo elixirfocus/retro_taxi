@@ -55,7 +55,6 @@ defmodule RetroTaxiWeb.ColumnComponent do
 
   def handle_info({:topic_card_created, topic_card}, socket)
       when socket.assigns.column_id == topic_card.column_id do
-    IO.inspect("topic_card_created")
     {:noreply, socket}
   end
 
