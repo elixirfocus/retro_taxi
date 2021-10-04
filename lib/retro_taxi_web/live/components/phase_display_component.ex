@@ -43,16 +43,18 @@ defmodule RetroTaxiWeb.PhaseDisplayComponent do
       <%= if @board.phase == :vote do %>
         <p>We are currently voting for which items we want to discuss. Each person gets six (6) votes but need not use every one.</p>
 
-        <p>Facilitator: When people are done voting, enter the discussion phase.</p>
+        <%= if @show_facilitator_tools do %>
+          <p>Facilitator: When people are done voting, enter the discussion phase.</p>
 
-        <div>
-          <button phx-click="start_discussion_phase" phx-target="<%= @myself %>"
-          class="bg-green-600 active:bg-green-700 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
-            <div class="ml-1">
-              Start Discussion Phase
-            </div>
-          </button>
-        </div>
+          <div>
+            <button phx-click="start_discussion_phase" phx-target="<%= @myself %>"
+            class="bg-green-600 active:bg-green-700 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
+              <div class="ml-1">
+                Start Discussion Phase
+              </div>
+            </button>
+          </div>
+        <% end %>
       <% end %>
 
       <%= if @board.phase == :discuss do %>
