@@ -75,6 +75,22 @@ defmodule RetroTaxiWeb.BoardLive do
     end
   end
 
+  def handle_info({:topic_card_updated, _topic_card}, socket) do
+    # FIXME: Could and maybe should cherry pick the deletion instead of such a harsh reload.
+    {:noreply,
+     update(socket, :columns, fn _current_columns ->
+       Boards.list_columns(socket.assigns.board.id, [:topic_cards])
+     end)}
+  end
+
+  def handle_info({:topic_card_deleted, _topic_card}, socket) do
+    # FIXME: Could and maybe should cherry pick the deletion instead of such a harsh reload.
+    {:noreply,
+     update(socket, :columns, fn _current_columns ->
+       Boards.list_columns(socket.assigns.board.id, [:topic_cards])
+     end)}
+  end
+
   @impl true
   def handle_info(
         %{event: "presence_diff", payload: _payload},
@@ -104,7 +120,7 @@ defmodule RetroTaxiWeb.BoardLive do
       <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 
       <%= for column <- @columns do %>
-        <%= live_component @socket, RetroTaxiWeb.ColumnComponent, id: column.id, column: column, board_phase: @board.phase %>
+        <%= live_component @socket, RetroTaxiWeb.ColumnComponent, id: column.id, column: column, board_phase: @board.phase, current_user: @current_user %>
       <% end %>
 
       </div>

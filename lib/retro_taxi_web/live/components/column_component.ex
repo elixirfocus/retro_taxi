@@ -3,6 +3,7 @@ defmodule RetroTaxiWeb.ColumnComponent do
 
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.TopicCard
+  alias RetroTaxi.Users.User
 
   def update(assigns, socket) do
     socket =
@@ -24,11 +25,14 @@ defmodule RetroTaxiWeb.ColumnComponent do
   end
 
   def handle_event("add-topic", %{"topic_card" => %{"content" => content}}, socket) do
+    %User{id: author_id} = socket.assigns.current_user
+
     {:ok, topic_card} =
-      Boards.create_topic_card(
+      Boards.create_topic_card(%{
+        author_id: author_id,
         content: content,
         column_id: socket.assigns.column.id
-      )
+      })
 
     # FIXME: We need to be more explicit about sort order here but need to
     # understand how everyone will see the cards during the compose phase before
@@ -88,7 +92,7 @@ defmodule RetroTaxiWeb.ColumnComponent do
       <% end %>
 
       <%= for topic_card <- @topic_cards do %>
-        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card.id, topic_card: topic_card, board_phase: @board_phase, can_edit: true %>
+        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card.id, topic_card: topic_card, board_phase: @board_phase, can_edit: topic_card.author_id == @current_user.id %>
       <% end %>
 
       <%# live_component @socket, RetroTaxiWeb.CreateTopicCardFormComponent %>

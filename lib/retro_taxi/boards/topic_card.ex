@@ -21,6 +21,7 @@ defmodule RetroTaxi.Boards.TopicCard do
   """
   @type t :: %__MODULE__{
           __meta__: Ecto.Schema.Metadata.t(),
+          author_id: User.id(),
           content: String.t(),
           id: id(),
           inserted_at: DateTime.t(),
@@ -33,6 +34,7 @@ defmodule RetroTaxi.Boards.TopicCard do
     field :sort_order, :integer
 
     belongs_to :column, Column
+    belongs_to :author, User, type: :binary_id
 
     timestamps(type: :utc_datetime)
   end

@@ -135,14 +135,15 @@ defmodule RetroTaxi.Boards do
   Returns `{:ok, topic_card}` when the entity has been successfully created or
   `{:error, changeset}` if their was a failure.
   """
-  @spec create_topic_card(content: String.t(), column_id: Column.id()) ::
+  @spec create_topic_card(%{content: String.t(), column_id: Column.id(), author_id: User.id()}) ::
           {:ok, TopicCard.t()} | {:error, Ecto.Changeset.t()}
-  def create_topic_card(content: content, column_id: column_id) do
+  def create_topic_card(%{content: content, column_id: column_id, author_id: author_id}) do
     sort_order_value = count_topic_cards(column_id: column_id) + 1
 
     topic_card_attr = %{
       content: content,
       column_id: column_id,
+      author_id: author_id,
       sort_order: sort_order_value
     }
 
@@ -171,8 +172,8 @@ defmodule RetroTaxi.Boards do
   @spec change_topic_card(%TopicCard{}, map()) :: Ecto.Changeset.t()
   def change_topic_card(%TopicCard{} = topic_card, attrs \\ %{}) do
     topic_card
-    |> cast(attrs, [:content, :column_id, :sort_order])
-    |> validate_required([:content, :column_id, :sort_order])
+    |> cast(attrs, [:author_id, :content, :column_id, :sort_order])
+    |> validate_required([:author_id, :content, :column_id, :sort_order])
   end
 
   @doc """
