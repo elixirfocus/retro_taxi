@@ -91,7 +91,9 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
           </div>
 
           <div class="flex justify-between items-end mt-2">
-            <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "start-editing" %>
+            <%= if @can_edit do %>
+              <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "start-editing" %>
+            <% end %>
 
             <%= if @board_phase == :vote do %>
               <%= live_component @socket, RetroTaxiWeb.VoteButtonComponent %>

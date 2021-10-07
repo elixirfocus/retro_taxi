@@ -88,7 +88,7 @@ defmodule RetroTaxiWeb.ColumnComponent do
       <% end %>
 
       <%= for topic_card <- @topic_cards do %>
-        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card.id, topic_card: topic_card, board_phase: @board_phase %>
+        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card.id, topic_card: topic_card, board_phase: @board_phase, can_edit: true %>
       <% end %>
 
       <%# live_component @socket, RetroTaxiWeb.CreateTopicCardFormComponent %>
