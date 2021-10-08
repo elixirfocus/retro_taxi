@@ -35,12 +35,8 @@ defmodule RetroTaxiWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Sandbox.checkout(RetroTaxi.Repo)
-
-    unless tags[:async] do
-      Sandbox.mode(RetroTaxi.Repo, {:shared, self()})
-    end
-
+    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(DemoApp.Repo, shared: not tags[:async])
+    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end
