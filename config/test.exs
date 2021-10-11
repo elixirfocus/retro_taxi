@@ -21,7 +21,7 @@ config :retro_taxi, RetroTaxiWeb.Endpoint,
   server: false
 
 # In test we don't send emails.
-config :greeter, Greeter.Mailer, adapter: Swoosh.Adapters.Test
+config :retro_taxi, RetroTaxi.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
 config :logger, level: :warn
