@@ -41,7 +41,8 @@ defmodule RetroTaxi.Factory do
     # FIXME: The use of this factory does not currently match the behaviors
     # built into `create_topic_card/2` making it use questionable.
     %TopicCard{
-      content: Faker.Lorem.sentence()
+      content: Faker.Lorem.sentence(),
+      author: build(:user)
     }
   end
 

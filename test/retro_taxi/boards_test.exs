@@ -73,27 +73,39 @@ defmodule RetroTaxi.BoardsTest do
     end
 
     test "success: can create topic card", %{column_id: column_id} do
-      sample_content = Faker.Lorem.sentence()
+      %{content: content, author_id: author_id} = params_for(:topic_card, author: insert(:user))
 
-      assert {:ok, %TopicCard{content: ^sample_content}} =
-               Boards.create_topic_card(content: sample_content, column_id: column_id)
+      assert {:ok, %TopicCard{content: ^content}} =
+               Boards.create_topic_card(%{
+                 content: content,
+                 column_id: column_id,
+                 author_id: author_id
+               })
     end
 
     test "success: a new topic card will have a sort order that matches the previous count plus one",
          %{column_id: column_id} do
       insert_list(3, :topic_card, column_id: column_id)
 
-      sample_content = Faker.Lorem.sentence()
+      %{content: content, author_id: author_id} = params_for(:topic_card, author: insert(:user))
 
-      assert {:ok, %TopicCard{content: ^sample_content, sort_order: 4}} =
-               Boards.create_topic_card(content: sample_content, column_id: column_id)
+      assert {:ok, %TopicCard{content: ^content, sort_order: 4}} =
+               Boards.create_topic_card(%{
+                 content: content,
+                 column_id: column_id,
+                 author_id: author_id
+               })
     end
 
     test "failure: fails with invalid content", %{column_id: column_id} do
       invalid_content = nil
 
       assert {:error, changeset} =
-               Boards.create_topic_card(content: invalid_content, column_id: column_id)
+               Boards.create_topic_card(%{
+                 content: invalid_content,
+                 column_id: column_id,
+                 author_id: nil
+               })
 
       assert %{content: ["can't be blank"]} = errors_on(changeset)
     end
