@@ -2,7 +2,7 @@ defmodule RetroTaxiWeb.VoteButtonComponent do
   use RetroTaxiWeb, :live_component
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <button
       class="bg-blue-400 active:bg-blue-500 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
       <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

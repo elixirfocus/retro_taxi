@@ -63,6 +63,10 @@ defmodule RetroTaxiWeb.ColumnComponent do
   end
 
   def render(assigns) do
+    # FIXME: Using deprecated `leex` sigil for now since migrating to
+    # `form_for/4` (instead of `form_for/3`) causes issues with component not
+    # being allowed in that kind of enclosure. Kind of a chicken and the egg
+    # problem.
     ~L"""
     <div id="column-<%= @column.id %>" class="bg-gray-200 p-2 my-2">
 

@@ -2,7 +2,7 @@ defmodule RetroTaxiWeb.BoardHeaderComponent do
   use RetroTaxiWeb, :live_component
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div class="lg:grid lg:grid-cols-2 lg:gap-4 mb-4">
 
       <div class="mb-4">

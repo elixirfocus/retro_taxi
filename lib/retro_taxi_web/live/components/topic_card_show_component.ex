@@ -66,6 +66,10 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
   end
 
   def render(assigns) do
+    # FIXME: Using deprecated `leex` sigil for now since migrating to
+    # `form_for/4` (instead of `form_for/3`) causes issues with component not
+    # being allowed in that kind of enclosure. Kind of a chicken and the egg
+    # problem.
     ~L"""
       <div id="topic-card-<%= @topic_card.id %>">
         <%= if @is_editing do %>

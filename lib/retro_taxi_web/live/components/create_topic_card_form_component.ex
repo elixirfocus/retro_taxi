@@ -2,7 +2,7 @@ defmodule RetroTaxiWeb.CreateTopicCardFormComponent do
   use RetroTaxiWeb, :live_component
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div class="bg-yellow-100 p-0 my-2">
 
       <form>
