@@ -13,6 +13,7 @@ defmodule RetroTaxi.Boards.TopicCard do
   use Ecto.Schema
 
   alias RetroTaxi.Boards.Column
+  alias RetroTaxi.Users.User
 
   @type id :: integer()
 

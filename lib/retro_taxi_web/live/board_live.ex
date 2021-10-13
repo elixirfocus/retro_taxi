@@ -111,8 +111,8 @@ defmodule RetroTaxiWeb.BoardLive do
     # TODO: If we are going to own the layout structure of the card columns in
     # this file, we may want similar ownership of the header layout rules that
     # currently live in `BoardHeaderComponent`.
-    ~L"""
-    <div id="board-<%= @board.id %>">
+    ~H"""
+    <div id={"board-" <> @board.id}>
 
       <%= live_component @socket, RetroTaxiWeb.BoardHeaderComponent, board: @board, users: @users %>
       <%= live_component @socket, RetroTaxiWeb.PhaseDisplayComponent, id: @board.id, board: @board, show_facilitator_tools: @current_user.id == @board.facilitator_id %>

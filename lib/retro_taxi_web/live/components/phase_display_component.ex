@@ -19,7 +19,7 @@ defmodule RetroTaxiWeb.PhaseDisplayComponent do
 
   @impl true
   def render(assigns) do
-    ~L"""
+    ~H"""
     <section class="prose mb-4">
 
       <%= if @board.phase == :capture do %>
@@ -29,7 +29,7 @@ defmodule RetroTaxiWeb.PhaseDisplayComponent do
           <p>Facilitator: When you have confirmation people are done composing topics, move the board into the Voting phase.</p>
 
           <div>
-            <button phx-click="start_voting_phase" phx-target="<%= @myself %>"
+            <button phx-click="start_voting_phase" phx-target={@myself}
             class="bg-green-600 active:bg-green-700 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
               <div class="ml-1">
                 Start Voting Phase
@@ -47,7 +47,7 @@ defmodule RetroTaxiWeb.PhaseDisplayComponent do
           <p>Facilitator: When people are done voting, enter the discussion phase.</p>
 
           <div>
-            <button phx-click="start_discussion_phase" phx-target="<%= @myself %>"
+            <button phx-click="start_discussion_phase" phx-target={@myself}
             class="bg-green-600 active:bg-green-700 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">
               <div class="ml-1">
                 Start Discussion Phase
