@@ -66,15 +66,12 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
   end
 
   def render(assigns) do
-    # FIXME: Using deprecated `leex` sigil for now since migrating to
-    # `form_for/4` (instead of `form_for/3`) causes issues with component not
-    # being allowed in that kind of enclosure. Kind of a chicken and the egg
-    # problem.
-    ~L"""
-      <div id="topic-card-<%= @topic_card.id %>">
+    ~H"""
+      <div id={"topic-card#{@topic_card.id}"}>
         <%= if @is_editing do %>
           <div class="bg-yellow-100 p-0 my-2">
-            <%= f = form_for @changeset, "#", phx_submit: "save", phx_target: @myself %>
+            <.form let={f} for={@compose_changeset} phx_submit={"save"} phx_target={@myself}>
+
               <%= textarea f, :content, class: "text-gray-900 mt-1 p-2 block w-full rounded-md bg-transparent border-transparent focus:border-transparent focus:ring-0 ring-0", rows: "3" %>
 
               <div class="flex justify-between items-end mt-2 p-2">
@@ -85,7 +82,7 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
                 <%= live_component @socket, RetroTaxiWeb.SubmitButtonComponent, title: "Save Card" %>
               </div>
 
-            </form>
+            </.form>
           </div>
         <% else %>
 

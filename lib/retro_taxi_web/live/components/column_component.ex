@@ -63,12 +63,8 @@ defmodule RetroTaxiWeb.ColumnComponent do
   end
 
   def render(assigns) do
-    # FIXME: Using deprecated `leex` sigil for now since migrating to
-    # `form_for/4` (instead of `form_for/3`) causes issues with component not
-    # being allowed in that kind of enclosure. Kind of a chicken and the egg
-    # problem.
-    ~L"""
-    <div id="column-<%= @column.id %>" class="bg-gray-200 p-2 my-2">
+    ~H"""
+    <div id={"column-#{@column.id}"} class="bg-gray-200 p-2 my-2">
 
       <h2 class="text-2xl font-bold">
         <%= @column.title %>
@@ -76,7 +72,7 @@ defmodule RetroTaxiWeb.ColumnComponent do
 
       <%= if @show_compose_form do %>
         <div class="bg-yellow-100 p-0 my-2">
-          <%= f = form_for @compose_changeset, "#", phx_submit: "add-topic", phx_target: @myself %>
+          <.form let={f} for={@compose_changeset} phx_submit={"add-topic"} phx_target={@myself}>
             <%= textarea f, :content, class: "text-gray-900 mt-1 p-2 block w-full rounded-md bg-transparent border-transparent focus:border-transparent focus:ring-0 ring-0", rows: "3" %>
 
             <div class="flex justify-between items-end mt-2 p-2">
@@ -86,10 +82,10 @@ defmodule RetroTaxiWeb.ColumnComponent do
               <%= live_component @socket, RetroTaxiWeb.SubmitButtonComponent, title: "Add Card" %>
             </div>
 
-          </form>
+            </.form>
         </div>
       <% else %>
-        <button phx-click="show-compose-form" phx-target="<%= @myself %>"
+        <button phx-click="show-compose-form" phx-target={@myself}
         class="bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-300 font-bold w-full text-gray-900 p-2 ">
           Add +
         </button>
