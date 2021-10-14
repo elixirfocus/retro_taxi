@@ -11,6 +11,7 @@ defmodule RetroTaxiWeb.ColumnComponent do
       |> assign(assigns)
       |> assign(show_compose_form: false)
       |> assign(topic_cards: Boards.list_topic_cards(column_id: assigns.column.id))
+      |> assign(compose_changeset: nil)
 
     {:ok, socket}
   end
