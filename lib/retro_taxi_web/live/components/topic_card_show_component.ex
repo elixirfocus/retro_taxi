@@ -70,7 +70,7 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
       <div id={"topic-card#{@topic_card.id}"}>
         <%= if @is_editing do %>
           <div class="bg-yellow-100 p-0 my-2">
-            <.form let={f} for={@compose_changeset} phx_submit={"save"} phx_target={@myself}>
+            <.form let={f} for={@changeset} phx_submit={"save"} phx_target={@myself}>
 
               <%= textarea f, :content, class: "text-gray-900 mt-1 p-2 block w-full rounded-md bg-transparent border-transparent focus:border-transparent focus:ring-0 ring-0", rows: "3" %>
 
