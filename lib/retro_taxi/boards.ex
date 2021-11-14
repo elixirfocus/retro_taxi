@@ -108,6 +108,13 @@ defmodule RetroTaxi.Boards do
     |> broadcast(:board_phase_updated, board.id)
   end
 
+  @spec list_columns(list(Column.id())) :: list(Column.t())
+  def list_columns(list_of_ids) when is_list(list_of_ids) do
+    from(c in Column, where: c.id in ^list_of_ids)
+    |> Repo.all()
+  end
+
+  @spec list_columns(Board.id(), keyword()) :: list(Column.t())
   def list_columns(board_id, preloads \\ []) do
     Repo.all(
       from c in Column, where: c.board_id == ^board_id, order_by: c.sort_order, preload: ^preloads
@@ -176,12 +183,29 @@ defmodule RetroTaxi.Boards do
     |> validate_required([:author_id, :content, :column_id, :sort_order])
   end
 
+  @spec list_topic_cards(list(TopicCard.id())) :: list(TopicCard.t())
+  def list_topic_cards(list_of_ids) when is_list(list_of_ids) do
+    from(tc in TopicCard, where: tc.id in ^list_of_ids)
+    |> Repo.all()
+  end
+
   @doc """
   Returns a list of `RetroTaxis.Boards.TopicCard` entities for the given column id.
   """
-  @spec list_topic_cards(column_id: Column.id()) :: list(TopicCard.t())
-  def list_topic_cards(column_id: column_id) do
+  @spec list_topic_cards(Column.id()) :: list(TopicCard.t())
+  def list_topic_cards(column_id) do
     Repo.all(query_topic_cards_for_column_id(column_id))
+  end
+
+  @spec list_topic_card_ids(Column.id()) :: list(TopicCard.t())
+  def list_topic_card_ids(column_id) do
+    query =
+      from tc in TopicCard,
+        where: tc.column_id == ^column_id,
+        order_by: tc.sort_order,
+        select: tc.id
+
+    Repo.all(query)
   end
 
   @doc """

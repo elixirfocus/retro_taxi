@@ -1,6 +1,8 @@
 defmodule RetroTaxiWeb.BoardLive do
   @moduledoc false
 
+  require Logger
+
   use RetroTaxiWeb, :live_view
 
   alias RetroTaxi.Boards
@@ -12,7 +14,7 @@ defmodule RetroTaxiWeb.BoardLive do
   def mount(:not_mounted_at_router, session, socket) do
     board = Boards.get_board!(session["board_id"], [:facilitator])
     current_user = session["current_user"]
-    columns = Boards.list_columns(board.id, [:topic_cards])
+    columns = Boards.list_columns(board.id)
 
     if connected?(socket), do: Boards.subscribe(board.id)
 
@@ -44,8 +46,7 @@ defmodule RetroTaxiWeb.BoardLive do
     {:ok, socket}
   end
 
-  def handle_info({:board_phase_updated, board}, socket)
-      when socket.assigns.board.id == board.id do
+  def handle_info({:board_phase_updated, board}, socket) do
     {:noreply,
      update(socket, :board, fn current_board ->
        %{current_board | phase: board.phase}
@@ -53,42 +54,35 @@ defmodule RetroTaxiWeb.BoardLive do
   end
 
   def handle_info({:topic_card_created, topic_card}, socket) do
-    # FIXME: For now we are using a generic `boards` topic name so we'll need to
-    # filter here to make sure we only react to topic cards that are present on
-    # this board.
-    # FIXME: I think this was address recently and this filter can be removed.
+    send_update(RetroTaxiWeb.ColumnComponent,
+      id: topic_card.column_id,
+      board_phase: socket.assigns.board.phase,
+      column: Enum.find(socket.assigns.columns, fn c -> c.id == topic_card.column_id end),
+      current_user: socket.assigns.current_user
+    )
 
-    column_ids = Enum.map(socket.assigns.columns, & &1.id)
-
-    if topic_card.column_id in column_ids do
-      # If a topic card of this board, reload the board.
-
-      # I feel like I need to maybe update a collection of columns on the
-      # liveview and have the columns be preloaded with the topic cards so I can
-      # properly kick the liveview change tracking with this call.
-      {:noreply,
-       update(socket, :columns, fn _current_columns ->
-         Boards.list_columns(socket.assigns.board.id, [:topic_cards])
-       end)}
-    else
-      {:noreply, socket}
-    end
+    {:noreply, socket}
   end
 
-  def handle_info({:topic_card_updated, _topic_card}, socket) do
-    # FIXME: Could and maybe should cherry pick the deletion instead of such a harsh reload.
-    {:noreply,
-     update(socket, :columns, fn _current_columns ->
-       Boards.list_columns(socket.assigns.board.id, [:topic_cards])
-     end)}
+  def handle_info({:topic_card_updated, topic_card}, socket) do
+    send_update(RetroTaxiWeb.TopicCardShowComponent,
+      id: topic_card.id,
+      board_phase: socket.assigns.board.phase,
+      current_user_id: socket.assigns.current_user.id
+    )
+
+    {:noreply, socket}
   end
 
-  def handle_info({:topic_card_deleted, _topic_card}, socket) do
-    # FIXME: Could and maybe should cherry pick the deletion instead of such a harsh reload.
-    {:noreply,
-     update(socket, :columns, fn _current_columns ->
-       Boards.list_columns(socket.assigns.board.id, [:topic_cards])
-     end)}
+  def handle_info({:topic_card_deleted, topic_card}, socket) do
+    send_update(RetroTaxiWeb.ColumnComponent,
+      id: topic_card.column_id,
+      board_phase: socket.assigns.board.phase,
+      column: Enum.find(socket.assigns.columns, fn c -> c.id == topic_card.column_id end),
+      current_user: socket.assigns.current_user
+    )
+
+    {:noreply, socket}
   end
 
   @impl true

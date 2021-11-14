@@ -5,13 +5,15 @@ defmodule RetroTaxiWeb.ColumnComponent do
   alias RetroTaxi.Boards.TopicCard
   alias RetroTaxi.Users.User
 
+  def mount(socket) do
+    {:ok, assign(socket, show_compose_form: false, compose_changeset: nil)}
+  end
+
   def update(assigns, socket) do
     socket =
       socket
       |> assign(assigns)
-      |> assign(show_compose_form: false)
-      |> assign(topic_cards: Boards.list_topic_cards(column_id: assigns.column.id))
-      |> assign(compose_changeset: nil)
+      |> assign(topic_card_ids: Boards.list_topic_card_ids(assigns.id))
 
     {:ok, socket}
   end
@@ -28,21 +30,19 @@ defmodule RetroTaxiWeb.ColumnComponent do
   def handle_event("add-topic", %{"topic_card" => %{"content" => content}}, socket) do
     %User{id: author_id} = socket.assigns.current_user
 
-    {:ok, topic_card} =
+    # The `create_topic_card/1` function will broadcast the needed PubSub event
+    # to notify all LiveView clients looking at this board that `topic_card_ids`
+    # need to be updated.
+    {:ok, _topic_card} =
       Boards.create_topic_card(%{
         author_id: author_id,
         content: content,
         column_id: socket.assigns.column.id
       })
 
-    # FIXME: We need to be more explicit about sort order here but need to
-    # understand how everyone will see the cards during the compose phase before
-    # we lay down too many rules.
-    new_list = socket.assigns.topic_cards ++ [topic_card]
-
+    # Hide the compose form.
     socket =
       socket
-      |> assign(topic_cards: new_list)
       |> assign(show_compose_form: false)
       |> assign(compose_changeset: nil)
 
@@ -92,11 +92,9 @@ defmodule RetroTaxiWeb.ColumnComponent do
         </button>
       <% end %>
 
-      <%= for topic_card <- @topic_cards do %>
-        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card.id, topic_card: topic_card, board_phase: @board_phase, can_edit: topic_card.author_id == @current_user.id %>
+      <%= for topic_card_id <- @topic_card_ids do %>
+        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card_id, board_phase: @board_phase, current_user_id: @current_user.id %>
       <% end %>
-
-      <%# live_component @socket, RetroTaxiWeb.CreateTopicCardFormComponent %>
 
     </div>
     """
