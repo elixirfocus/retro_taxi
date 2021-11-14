@@ -1,8 +1,6 @@
 defmodule RetroTaxiWeb.BoardLive do
   @moduledoc false
 
-  require Logger
-
   use RetroTaxiWeb, :live_view
 
   alias RetroTaxi.Boards
