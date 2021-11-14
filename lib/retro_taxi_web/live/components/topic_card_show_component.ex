@@ -2,6 +2,7 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
   use RetroTaxiWeb, :live_component
 
   alias RetroTaxi.Boards
+  alias RetroTaxi.Boards.TopicCard
 
   def mount(socket) do
     {:ok, assign(socket, is_editing: false)}
