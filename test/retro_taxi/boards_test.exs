@@ -138,7 +138,7 @@ defmodule RetroTaxi.BoardsTest do
         %TopicCard{content: content_4}
       ] = insert_list(4, :topic_card, column_id: column_id)
 
-      fetched_topic_cards = Boards.list_topic_cards(column_id: column_id)
+      fetched_topic_cards = Boards.list_topic_cards(column_id)
 
       assert length(fetched_topic_cards) == 4
       assert Enum.find(fetched_topic_cards, &match?(%TopicCard{content: ^content_1}, &1))

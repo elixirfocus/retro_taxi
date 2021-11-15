@@ -2,14 +2,47 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
   use RetroTaxiWeb, :live_component
 
   alias RetroTaxi.Boards
+  alias RetroTaxi.Boards.TopicCard
 
-  def update(assigns, socket) do
-    socket =
-      socket
-      |> assign(assigns)
-      |> assign(is_editing: false)
+  def mount(socket) do
+    {:ok, assign(socket, is_editing: false)}
+  end
 
-    {:ok, socket}
+  def preload(list_of_assigns) do
+    # This component has a requirement to know if the topic card it will render
+    # should be presented as editable to the current user. However to know this
+    # editable value we need the `topic_card` entity, which for optimizations
+    # reasons is loaded in this `preload/1` function.
+    #
+    # Since the `current_user_id` will be the same value for all assigns in the
+    # `list_of_assigns` we just grab it from the first item in the list. Later
+    # will compare it to the author of the loaded `topic_card` to figure out if
+    # the component should be presented as editable.
+    current_user_id = List.first(list_of_assigns).current_user_id
+
+    # Instead of having each component load its own topic card, we load them
+    # all here as a single database call.
+    topic_cards_index_map = topic_cards_index_map(list_of_assigns)
+
+    Enum.map(list_of_assigns, fn assigns ->
+      # Using the id from the assigns, get the appropriate topic card.
+      topic_card = topic_cards_index_map[assigns.id]
+
+      # Add that topic card to the assigns, along with the proper `can_edit` value.
+      assigns
+      |> Map.put(:topic_card, topic_card)
+      |> Map.put(:can_edit, topic_card.author_id == current_user_id)
+    end)
+  end
+
+  # Loads and returns an index-keyed map of topic cards.
+  @spec topic_cards_index_map(list()) :: %{TopicCard.id() => TopicCard.t()}
+  defp topic_cards_index_map(list_of_assigns) do
+    list_of_assigns
+    |> Enum.map(& &1.id)
+    |> Boards.list_topic_cards()
+    |> Enum.map(fn tc -> {tc.id, tc} end)
+    |> Map.new()
   end
 
   def handle_event("start-editing", _, socket) do
