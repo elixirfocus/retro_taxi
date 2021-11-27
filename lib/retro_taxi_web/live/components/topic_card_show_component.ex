@@ -1,6 +1,12 @@
 defmodule RetroTaxiWeb.TopicCardShowComponent do
   use RetroTaxiWeb, :live_component
 
+  import RetroTaxiWeb.CloseButtonComponent, only: [close_button: 1]
+  import RetroTaxiWeb.EditButtonComponent, only: [edit_button: 1]
+  import RetroTaxiWeb.VoteButtonComponent, only: [vote_button: 1]
+  import RetroTaxiWeb.TrashButtonComponent, only: [trash_button: 1]
+  import RetroTaxiWeb.SubmitButtonComponent, only: [submit_button: 1]
+
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.TopicCard
 
@@ -109,10 +115,10 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
 
               <div class="flex justify-between items-end mt-2 p-2">
                 <div>
-                  <%= live_component @socket, RetroTaxiWeb.CloseButtonComponent, target: @myself, click_event: "cancel-editing" %>
-                  <%= live_component @socket, RetroTaxiWeb.TrashButtonComponent, target: @myself, click_event: "delete" %>
+                  <.close_button target={@myself} click_event="cancel-editing" />
+                  <.trash_button target={@myself} click_event="delete" />
                 </div>
-                <%= live_component @socket, RetroTaxiWeb.SubmitButtonComponent, title: "Save Card" %>
+                <.submit_button title="Save Card" />
               </div>
 
             </.form>
@@ -126,11 +132,11 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
 
           <div class="flex justify-between items-end mt-2">
             <%= if @can_edit do %>
-              <%= live_component @socket, RetroTaxiWeb.EditButtonComponent, target: @myself, click_event: "start-editing" %>
+              <.edit_button target={@myself} click_event="start-editing" />
             <% end %>
 
             <%= if @board_phase == :vote do %>
-              <%= live_component @socket, RetroTaxiWeb.VoteButtonComponent %>
+              <.vote_button />
             <% end %>
 
           </div>

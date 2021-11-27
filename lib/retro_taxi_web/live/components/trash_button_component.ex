@@ -1,7 +1,7 @@
 defmodule RetroTaxiWeb.TrashButtonComponent do
-  use RetroTaxiWeb, :live_component
+  use Phoenix.Component
 
-  def render(assigns) do
+  def trash_button(assigns) do
     ~H"""
     <button type="button" data-confirm="Are you sure you want to delete this topic card?" class="w-6 h-6" phx-click={@click_event} phx-target={@target}>
       <svg xmlns="http://www.w3.org/2000/svg" class="text-red-700 hover:text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">

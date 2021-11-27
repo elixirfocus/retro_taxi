@@ -1,7 +1,7 @@
 defmodule RetroTaxiWeb.BoardHeaderComponent do
-  use RetroTaxiWeb, :live_component
+  use Phoenix.Component
 
-  def render(assigns) do
+  def header(assigns) do
     ~H"""
     <div class="lg:grid lg:grid-cols-2 lg:gap-4 mb-4">
 

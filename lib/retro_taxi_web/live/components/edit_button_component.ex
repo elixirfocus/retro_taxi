@@ -1,7 +1,7 @@
 defmodule RetroTaxiWeb.EditButtonComponent do
-  use RetroTaxiWeb, :live_component
+  use Phoenix.Component
 
-  def render(assigns) do
+  def edit_button(assigns) do
     ~H"""
     <button class="w-6 h-6" phx-click={@click_event} phx-target={@target}>
       <svg class="text-gray-300 hover:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none"

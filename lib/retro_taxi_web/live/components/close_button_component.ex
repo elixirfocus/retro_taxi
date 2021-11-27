@@ -1,7 +1,7 @@
 defmodule RetroTaxiWeb.CloseButtonComponent do
-  use RetroTaxiWeb, :live_component
+  use Phoenix.Component
 
-  def render(assigns) do
+  def close_button(assigns) do
     ~H"""
     <button type="button" data-confirm="Are you sure you want to cancel?" class="w-6 h-6" phx-click={@click_event} phx-target={@target}>
       <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-700 hover:text-gray-800" fill="none"

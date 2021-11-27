@@ -1,6 +1,9 @@
 defmodule RetroTaxiWeb.ColumnComponent do
   use RetroTaxiWeb, :live_component
 
+  import RetroTaxiWeb.CloseButtonComponent, only: [close_button: 1]
+  import RetroTaxiWeb.SubmitButtonComponent, only: [submit_button: 1]
+
   alias RetroTaxi.Boards
   alias RetroTaxi.Boards.TopicCard
   alias RetroTaxi.Users.User
@@ -78,9 +81,9 @@ defmodule RetroTaxiWeb.ColumnComponent do
 
             <div class="flex justify-between items-end mt-2 p-2">
               <div>
-                <%= live_component @socket, RetroTaxiWeb.CloseButtonComponent, target: @myself, click_event: "hide-compose-form" %>
+                <.close_button target={@myself} click_event="hide-compose-form" />
               </div>
-              <%= live_component @socket, RetroTaxiWeb.SubmitButtonComponent, title: "Add Card" %>
+              <.submit_button title="Add Card" />
             </div>
 
             </.form>
@@ -93,7 +96,7 @@ defmodule RetroTaxiWeb.ColumnComponent do
       <% end %>
 
       <%= for topic_card_id <- @topic_card_ids do %>
-        <%= live_component @socket, RetroTaxiWeb.TopicCardShowComponent, id: topic_card_id, board_phase: @board_phase, current_user_id: @current_user.id %>
+        <%= live_component RetroTaxiWeb.TopicCardShowComponent, id: topic_card_id, board_phase: @board_phase, current_user_id: @current_user.id %>
       <% end %>
 
     </div>

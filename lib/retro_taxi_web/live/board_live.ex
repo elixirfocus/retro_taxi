@@ -3,6 +3,8 @@ defmodule RetroTaxiWeb.BoardLive do
 
   use RetroTaxiWeb, :live_view
 
+  import RetroTaxiWeb.BoardHeaderComponent, only: [header: 1]
+
   alias RetroTaxi.Boards
   alias RetroTaxiWeb.Presence
 
@@ -106,13 +108,13 @@ defmodule RetroTaxiWeb.BoardLive do
     ~H"""
     <div id={"board-" <> @board.id}>
 
-      <%= live_component @socket, RetroTaxiWeb.BoardHeaderComponent, board: @board, users: @users %>
-      <%= live_component @socket, RetroTaxiWeb.PhaseDisplayComponent, id: @board.id, board: @board, show_facilitator_tools: @current_user.id == @board.facilitator_id %>
+      <.header board={@board} users={@users} />
+      <%= live_component RetroTaxiWeb.PhaseDisplayComponent, id: @board.id, board: @board, show_facilitator_tools: @current_user.id == @board.facilitator_id %>
 
       <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 
       <%= for column <- @columns do %>
-        <%= live_component @socket, RetroTaxiWeb.ColumnComponent, id: column.id, column: column, board_phase: @board.phase, current_user: @current_user %>
+        <%= live_component RetroTaxiWeb.ColumnComponent, id: column.id, column: column, board_phase: @board.phase, current_user: @current_user %>
       <% end %>
 
       </div>
