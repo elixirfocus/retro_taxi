@@ -1,7 +1,7 @@
 defmodule RetroTaxiWeb.VoteButtonComponent do
-  use RetroTaxiWeb, :live_component
+  use Phoenix.Component
 
-  def render(assigns) do
+  def vote_button(assigns) do
     ~H"""
     <button
       class="bg-blue-400 active:bg-blue-500 hover:border-white border-transparent border flex items-center px-2 py-1 font-bold text-gray-100">

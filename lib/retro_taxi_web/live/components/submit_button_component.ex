@@ -1,7 +1,7 @@
 defmodule RetroTaxiWeb.SubmitButtonComponent do
-  use RetroTaxiWeb, :live_component
+  use Phoenix.Component
 
-  def render(assigns) do
+  def submit_button(assigns) do
     ~H"""
     <button
       type="submit"
