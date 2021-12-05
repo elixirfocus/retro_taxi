@@ -16,7 +16,10 @@ defmodule RetroTaxiWeb.ColumnComponent do
     socket =
       socket
       |> assign(assigns)
-      |> assign(topic_card_ids: Boards.list_topic_card_ids(assigns.id))
+      |> assign(
+        topic_card_ids:
+          sorted_topic_card_ids(assigns.board_phase, assigns.id, assigns.current_user.id)
+      )
 
     {:ok, socket}
   end
@@ -64,6 +67,21 @@ defmodule RetroTaxiWeb.ColumnComponent do
   def handle_info({:topic_card_created, topic_card}, socket)
       when socket.assigns.column_id == topic_card.column_id do
     {:noreply, socket}
+  end
+
+  # For the `:capture` phase, return a id list with all current_user cards at the top.
+  defp sorted_topic_card_ids(:capture, column_id, current_user_id) do
+    topic_cards = Boards.list_topic_cards(column_id)
+
+    current_user_topic_cards = Enum.filter(topic_cards, &(&1.author_id == current_user_id))
+    other_users_topic_cards = Enum.reject(topic_cards, &(&1.author_id == current_user_id))
+
+    (current_user_topic_cards ++ other_users_topic_cards) |> Enum.map(& &1.id)
+  end
+
+  # For non :capture` phases, return a id list with the default sort (inserted_at descending).
+  defp sorted_topic_card_ids(_phase, column_id, _current_user_id) do
+    Boards.list_topic_card_ids(column_id)
   end
 
   def render(assigns) do

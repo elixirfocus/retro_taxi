@@ -89,7 +89,7 @@ defmodule RetroTaxi.BoardsTest do
 
       %{content: content, author_id: author_id} = params_for(:topic_card, author: insert(:user))
 
-      assert {:ok, %TopicCard{content: ^content, sort_order: 4}} =
+      assert {:ok, %TopicCard{content: ^content}} =
                Boards.create_topic_card(%{
                  content: content,
                  column_id: column_id,

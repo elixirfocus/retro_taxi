@@ -34,10 +34,16 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
       # Using the id from the assigns, get the appropriate topic card.
       topic_card = topic_cards_index_map[assigns.id]
 
+      blur_class =
+        if assigns.board_phase == :capture && topic_card.author_id != current_user_id do
+          "blur-sm"
+        end
+
       # Add that topic card to the assigns, along with the proper `can_edit` value.
       assigns
       |> Map.put(:topic_card, topic_card)
       |> Map.put(:can_edit, topic_card.author_id == current_user_id)
+      |> Map.put(:blur_class, blur_class)
     end)
   end
 
@@ -126,7 +132,7 @@ defmodule RetroTaxiWeb.TopicCardShowComponent do
         <% else %>
 
         <div class="bg-blue-500 p-2 my-2">
-          <div class="text-gray-50 font-medium">
+          <div class={"text-gray-50 font-medium #{@blur_class}"}>
             <%= @topic_card.content %>
           </div>
 
