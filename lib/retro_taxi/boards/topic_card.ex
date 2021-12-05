@@ -26,16 +26,11 @@ defmodule RetroTaxi.Boards.TopicCard do
           content: String.t(),
           id: id(),
           inserted_at: DateTime.t(),
-          # FIXME: Remove sort_order since we no longer use it.
-          sort_order: integer(),
           updated_at: DateTime.t()
         }
 
   schema "topic_cards" do
     field :content, :string
-
-    # FIXME: Remove sort_order since we no longer use it.
-    field :sort_order, :integer
 
     belongs_to :column, Column
     belongs_to :author, User, type: :binary_id

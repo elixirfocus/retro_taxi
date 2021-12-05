@@ -145,13 +145,10 @@ defmodule RetroTaxi.Boards do
   @spec create_topic_card(%{content: String.t(), column_id: Column.id(), author_id: User.id()}) ::
           {:ok, TopicCard.t()} | {:error, Ecto.Changeset.t()}
   def create_topic_card(%{content: content, column_id: column_id, author_id: author_id}) do
-    sort_order_value = count_topic_cards(column_id: column_id) + 1
-
     topic_card_attr = %{
       content: content,
       column_id: column_id,
-      author_id: author_id,
-      sort_order: sort_order_value
+      author_id: author_id
     }
 
     %TopicCard{}
@@ -179,8 +176,8 @@ defmodule RetroTaxi.Boards do
   @spec change_topic_card(%TopicCard{}, map()) :: Ecto.Changeset.t()
   def change_topic_card(%TopicCard{} = topic_card, attrs \\ %{}) do
     topic_card
-    |> cast(attrs, [:author_id, :content, :column_id, :sort_order])
-    |> validate_required([:author_id, :content, :column_id, :sort_order])
+    |> cast(attrs, [:author_id, :content, :column_id])
+    |> validate_required([:author_id, :content, :column_id])
   end
 
   @spec list_topic_cards(list(TopicCard.id())) :: list(TopicCard.t())
