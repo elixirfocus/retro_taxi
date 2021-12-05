@@ -202,7 +202,7 @@ defmodule RetroTaxi.Boards do
     query =
       from tc in TopicCard,
         where: tc.column_id == ^column_id,
-        order_by: tc.sort_order,
+        order_by: [desc: tc.inserted_at],
         select: tc.id
 
     Repo.all(query)
@@ -218,7 +218,7 @@ defmodule RetroTaxi.Boards do
 
   @spec query_topic_cards_for_column_id(Column.id()) :: Ecto.Query.t()
   defp query_topic_cards_for_column_id(column_id) do
-    from tc in TopicCard, where: tc.column_id == ^column_id, order_by: tc.sort_order
+    from tc in TopicCard, where: tc.column_id == ^column_id, order_by: [desc: tc.inserted_at]
   end
 
   @spec default_columns() :: list(%{title: String.t(), sort_order: non_neg_integer()})
