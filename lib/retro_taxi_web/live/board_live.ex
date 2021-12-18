@@ -5,15 +5,20 @@ defmodule RetroTaxiWeb.BoardLive do
 
   import RetroTaxiWeb.BoardHeaderComponent, only: [header: 1]
 
+  alias Phoenix.LiveView.Socket
   alias RetroTaxi.Boards
   alias RetroTaxiWeb.Presence
 
   defp presence_topic(board_id), do: "board-presence:#{board_id}"
 
-  @impl true
-  def mount(:not_mounted_at_router, session, socket) do
-    board = Boards.get_board!(session["board_id"], [:facilitator])
-    current_user = session["current_user"]
+  @impl Phoenix.LiveView
+  @spec mount(:not_mounted_at_router, map(), Socket.t()) :: {:ok, Socket.t()}
+  def mount(
+        :not_mounted_at_router,
+        %{"board_id" => board_id, "current_user" => current_user},
+        socket
+      ) do
+    board = Boards.get_board!(board_id, [:facilitator])
     columns = Boards.list_columns(board.id)
 
     if connected?(socket), do: Boards.subscribe(board.id)
@@ -85,7 +90,7 @@ defmodule RetroTaxiWeb.BoardLive do
     {:noreply, socket}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def handle_info(
         %{event: "presence_diff", payload: _payload},
         %{assigns: %{board: board}} = socket
@@ -100,7 +105,7 @@ defmodule RetroTaxiWeb.BoardLive do
     {:noreply, assign(socket, users: users)}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def render(assigns) do
     # TODO: If we are going to own the layout structure of the card columns in
     # this file, we may want similar ownership of the header layout rules that
