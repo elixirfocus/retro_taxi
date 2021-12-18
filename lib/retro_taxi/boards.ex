@@ -57,7 +57,7 @@ defmodule RetroTaxi.Boards do
 
     iex> board = RetroTaxi.Boards.get_board!("db1c138b-76b2-462c-a6a1-6696b5180aba", [:columns])
   """
-  @spec get_board!(Board.id(), keyword() | nil) :: Board.t()
+  @spec get_board!(Board.id(), [atom()]) :: Board.t()
   def get_board!(id, preloads \\ []) do
     Board
     |> Repo.get!(id)
