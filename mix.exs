@@ -51,7 +51,7 @@ defmodule RetroTaxi.MixProject do
       {:credo, "~> 1.6.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ecto_sql, "~> 3.7.1"},
-      {:esbuild, "~> 0.3.4", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
       {:ex_doc, "~> 0.26", only: :dev, runtime: false},
       {:ex_machina, "~> 2.7.0"},
       {:faker, "~> 0.17"},
@@ -67,8 +67,8 @@ defmodule RetroTaxi.MixProject do
       {:phoenix_live_view, "~> 0.17.5"},
       {:phoenix, "~> 1.6.5"},
       {:plug_cowboy, "~> 2.5"},
-      {:postgrex, "~> 0.15.11"},
-      {:swoosh, "~> 1.5.2"},
+      {:postgrex, "~> 0.16"},
+      {:swoosh, "~> 1.6"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"}
     ]
